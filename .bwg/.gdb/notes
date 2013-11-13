@@ -1,0 +1,4 @@
+local build of gdb-7.6 doesn't work. Possibly cygwin/MinGW incompatability
+
+using cygwin compiler and has /cygdrive/ all over it
+

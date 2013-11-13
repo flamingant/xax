@@ -1,0 +1,2 @@
+set args -mssh_sh localhost nick lllmmm -k
+b pollit

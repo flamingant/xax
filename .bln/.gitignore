@@ -1,0 +1,12 @@
+tc
+/lgen.mk
+/gen.c
+/genver.pm
+*.tmp
+*.log
+
+/.gdb.el
+/locate.mk
+/*.exe.stackdump
+/*.vgo
+/.ma

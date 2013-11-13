@@ -1,0 +1,174 @@
+* dht
+** TODO obsolete command pages
+*** DONE listmethods
+*** DONE get_label_ratios (moved to own unit)
+*** DONE alphabetize (moved to own unit)
+
+
+* ht
+  action phases can be combined when wait conditions understood better
+
+
+* uf
+** DONE don't add uf to poll list if they are timer driven (m_irc)
+** DONE private message trace flags
+** can we use select for writes too?
+
+
+* support code
+** ZSC needed?
+   This is not ideal, because some functions return > 0 for success
+   and < 0 for fail, so you don't check for particular return value,
+   but return value condition.
+   It would be useful to be able to tie the error condition check
+   to the function definition somehow. This scheme goes part of the
+   way but it's not too clear how to expand upon it.
+** atinit
+** what is that tp.pl for?
+** arg_expand 
+   support function names
+   separate file
+** split jsf into json and jsf
+** review what vcf can offer
+** log
+  rationalize proliferation of log sections
+
+
+* library
+** DONE printg allow '{}' for delimiters
+** separate common.c functions to library
+** to libpu
+*** DONE iterator
+*** DONE rat.c
+*** TODO replace low level memory functions (e.g rcons) with rat/ray
+** generic memory allocation
+   gm.h doesn't offer multiple instance, e.g type/data.
+   gmb is suitable for lisp objects
+   rat/ray no good for this (fixed length items only)
+** done very simple single non-extendable MT memory allocator
+*** not sure why I think this is useful
+    because a set of functions can be unaware how its memory
+    is being allocated, it is passed a gmc reference and allocates
+    using that structure. If it is aware that it is not responsible
+    for freeing any of its memory, the destruction of the allocator
+    is external.
+** local library functions masking libpu
+   dp.c
+   errors.c
+
+
+* http server
+** server responses (HPM_CONTENT_SEND) - JSON?
+** use quick context in server pages
+** issues with leading slashes
+** join server page 'hpf' (http page functions) to functional code
+   having it all in ht_tc.c forces unneccessary dependencies
+
+
+* ssh
+
+
+* openssl
+** openssl stuff hodge-podge of curl crap
+** how can we use BIO
+** does ssl.c do anything?
+*** do we want to provide a server too?
+
+
+* sql
+** other sql uses
+** transaction bugs
+
+
+* gen
+** other collections?
+*** sf types
+*** jsf
+*** message types
+** DONE test - probably useless 
+   only works with (void) functions
+   don't like that ordinal business
+
+** implement quick pages
+
+* build
+** watcom compatibility
+** test locate issues
+   use self-modifying files?
+** use tweak.h for anything that changes frequently
+** makefiles
+   some makefiles are very similar across different $(ARCH) types, e.g .bln and
+   .bwg, and in the case of .bld slightly less similar. However it is probably not
+   worth forcing a common makefile across all (say gcc) targets and have the
+   rest done by a config pass. This is because other compilers (should we choose
+   to use them) will have completely different makefile structures and in some
+   cases the output from lgen.pl (say) will need to be different depending on
+   the build toolset.
+
+
+
+* lisp
+
+* arg handling
+  Collected argsets are useful for compiling a help text, but are not
+  currently used to actually read parameters.
+  There is a conflict between parameter args and command args.
+  Command args cannot be processed until the initialization has been done
+  Initialization depends upon parameter args.
+  
+  We cannot have multiple argset phases.
+  The accept function can choose to ignore parameters and commands
+  it is not ready for, however the deferred processing must be finished
+  using further passes through args
+  we want to be able to set certain options on the fly after the program
+  has been running. But what of the side-effects of those changes?
+  problem arises because modes must initialize and then process their
+  parameters.
+** we are not using arg types and validating parameter values
+   this isn't really that importatnt. It is simpler for the accept
+   function to get the raw string, as it can do anything it wants with
+   it. The type in the ARGITEM is used for documentation only.
+** should we peek for the mode first, before any other processing?
+** mode should be major.minor - retire submode
+** can we integrate short and long args
+** we can still use old arg parsing, argsets aren't completely mandatory
+   but don't want to lose associated functionality
+** dingoo had option generators
+*** family and name (similar to arg)
+*** session parameters stored in database
+*** option could cascade to arg
+*** command is higher concept than command page (--hexec)
+    --hexec is a simulation of one method of command invocation
+**** command invocation methods?
+     command line
+     http server
+     internal scripting - lisp?
+     windows GUI, forms (with parameters) buttons for parameterless commands
+** this is a useful discussion
+   Need to set out the problems and measure the extent to which the
+   development of useful functionality is made easier or harder.
+   Too much reliance on ugen is not good, and forcing use of ugen
+   is not good either
+     
+  
+
+* freeleech torrents
+  we didn't get them from the irc feed so there are no records in the
+  announce table. however, the status records are missing too.
+  the torrent_add_response should have added them, but either the
+  commit/transaction failed or the response got lost
+  so how can we recreate the hashes.
+** method: delete the torrent but keep the data and reload the torrent
+   - loses stats
+** method: add the torrent again and see if the hash is returned
+   - it isn't - nothing is returned
+
+* clone
+  after changing this file and committin, tried to push
+  but it failed because a change was made in the origin
+  repository and so had to pull those changes first
+  change to .emacs.el
+  The pulled change goes before the local change which
+  suggests the local changes get rebased onto new version
+  of origin
+  here's a change made on the cpp branch
