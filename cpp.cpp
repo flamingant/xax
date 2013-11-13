@@ -59,8 +59,8 @@ class ARGSET {
     ARGITEM *itemfindbyname(char *name) {
 	RCONS *rc ;
 	for (rc = items ; rc ; rc = rc->cdr) {
-	    ARGITEM &a = ((ARGITEM &) rc->car) ;	/* NOT WORK! */
-	    if (a.match(name)) return (&a) ;
+	    ARGITEM *a = ((ARGITEM *) rc->car) ;
+	    if (a->match(name)) return (a) ;
 	    }
 	return 0 ;
 	}
