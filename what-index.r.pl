@@ -1,0 +1,22 @@
+ajax.php?action=index
+{
+    "status":"success",
+    "response":{
+	"username":"fishybishop",
+	"id":376076,
+	"authkey":"a8f5e81580a561068875c0439ab90760",
+	"passkey":"lh6umeb41zsccsi7xdizmedvjinubbia",
+	"notifications":{
+	    "messages":0,
+	    "notifications":0,
+	    "newAnnouncement":false,
+	    "newBlog":true,
+	    "newSubscriptions":false},
+	"userstats":{
+	    "uploaded":1290501668921,
+	    "downloaded":679993038930,
+	    "ratio":1.89,
+	    "requiredratio":0.6,
+	    "class":"Elite"}
+    }
+}
