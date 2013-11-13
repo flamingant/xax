@@ -32,7 +32,7 @@ class ARGITEM {
     }
     static void print(ARGITEM *item)
 {
-    printf("%s %s\n",item->argname,item->valuename) ;
+    item->prin() ;
     }
 
 
