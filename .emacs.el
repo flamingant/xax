@@ -83,3 +83,13 @@ help-map
 
 (setq grep-command "grep")
 
+(define-key global-map "\C-x\C-v" vc-prefix-map)
+(setq vc-extended-map (make-sparse-keymap))
+(define-key vc-prefix-map "\C-v" vc-extended-map)
+
+(define-key vc-extended-map "\C-a" 'git-commit-amend)
+(defun git-commit-amend () (interactive)
+  (vc-git--call nil "commit" "-a" "--amend" "--reuse-message=HEAD" )
+  )
+
+
