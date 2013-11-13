@@ -87,6 +87,21 @@ ARGITEM::ARGITEM(ARGSET &set,
 }
 
 /* ================================================================ */
+class ARGITEM_M: ARGITEM {
+    public:
+    ARGITEM_M(ARGSET &set,
+		 char *help_,
+		 char *argname_,
+		 char *valuename_) :
+	ARGITEM(set,help_,argname_,valuename_) {}
+
+    int match(char *name)
+{
+    return (argname[0] == name[0]) ;
+    }
+    } ;
+    
+/* ================================================================ */
 extern ARGSET as ;
 
 static ARGITEM arg__zzz(as,
@@ -99,6 +114,12 @@ static ARGITEM arg__yyy(as,
 		      "Y",
 		      "YY",
 		      "YYY"
+		      ) ;
+
+static ARGITEM_M arg__ppp(as,
+		      "P help",
+		      "Proz",
+		      "what value?"
 		      ) ;
 
 ARGSET as("Main") ;
