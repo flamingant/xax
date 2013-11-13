@@ -30,9 +30,9 @@ class ARGITEM {
 {
     printf("%s %s\n",argname,valuename) ;
     }
-    static void print(ARGITEM *item)
+    static void print(ARGITEM &item)
 {
-    item->prin() ;
+    item.prin() ;
     }
 
 
