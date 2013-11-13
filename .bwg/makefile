@@ -43,7 +43,7 @@ CDEFS_I +=	-DDEBUG=1 -D__$(@F:.o=_c)
 #		@$(CC) -x c++ $(CPPFLAGS) $(CPPWARN) $(CINCLUDE) $(CDEFS_I) $(CDEFS_V) -c $<
 
 ################################################################
-CPPFLAGS +=	$(CCDBG)
+CPPFLAGS +=	$(CCDBG) -std=c++11
 #CPPFLAGS +=	-fpermissive
 
 CPPWARN =	$(WARN) \

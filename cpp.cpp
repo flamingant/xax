@@ -89,18 +89,16 @@ ARGITEM::ARGITEM(ARGSET &set,
 /* ================================================================ */
 class ARGITEM_M: ARGITEM {
     public:
-    ARGITEM_M(ARGSET &set,
-		 char *help_,
-		 char *argname_,
-		 char *valuename_) :
-	ARGITEM(set,help_,argname_,valuename_) {}
-
+    using ARGITEM::ARGITEM ;
     int match(char *name)
 {
     return (argname[0] == name[0]) ;
     }
     } ;
-    
+/*    
+http://stackoverflow.com/questions/12783643/force-a-derived-class-to-use-the-constructor-of-the-base-class
+http://www.stroustrup.com/C++11FAQ.html#inheriting
+*/
 /* ================================================================ */
 extern ARGSET as ;
 
