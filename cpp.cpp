@@ -95,10 +95,6 @@ static void arg()
     printf("done\n") ;
     }
 
-/*
-ARGITEM's are initialized before the ARGSET because they appear
-first in the TU
-*/
 /* ================================================================ */
 static int cpp_main(int argc,char **argv,char *mode)
 {
