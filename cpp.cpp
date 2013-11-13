@@ -26,6 +26,10 @@ class ARGITEM {
 {
     return !strcmp(argname,name) ;
     }
+    void prin()
+{
+    printf("%s %s\n",argname,valuename) ;
+    }
     static void print(ARGITEM *item)
 {
     printf("%s %s\n",item->argname,item->valuename) ;
