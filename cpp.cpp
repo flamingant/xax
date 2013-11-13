@@ -30,12 +30,14 @@ class ARGITEM {
 {
     printf("%s %s\n",argname,valuename) ;
     }
-    static void print(ARGITEM &item)
+static void print(ARGITEM &item)
 {
     item.prin() ;
     }
-
-
+static int match_(ARGITEM &item,char *name)
+{
+    return item.match(name) ;
+    }
 } ;
 
 class ARGSET {
@@ -53,6 +55,14 @@ class ARGSET {
     void additem(ARGITEM *item) {
 	items = rcons_cons(item,items) ;
 	printf("%s\n",item->argname) ;
+	}
+    ARGITEM *itemfindbyname(char *name) {
+	RCONS *rc ;
+	for (rc = items ; rc ; rc = rc->cdr) {
+	    ARGITEM &a = ((ARGITEM &) rc->car) ;	/* NOT WORK! */
+	    if (a.match(name)) return (&a) ;
+	    }
+	return 0 ;
 	}
     private:
     RCONS	*items ;
@@ -93,16 +103,26 @@ static ARGITEM arg__yyy(as,
 
 ARGSET as("Main") ;
 
-static void arg()
+static void arg(int argc,char **argv)
 {
     as.showitems() ;
+    for (int i = 0 ; i < argc ; i++) {
+	if (!argv[i]) continue ;
+	ARGITEM *item = as.itemfindbyname(argv[i]) ;
+	if (item) {
+	    item->prin() ;
+	    }
+	else {
+	    printf("unknown arg %s\n",argv[i]) ;
+	    }
+	}
     printf("done\n") ;
     }
 
 /* ================================================================ */
 static int cpp_main(int argc,char **argv,char *mode)
 {
-    arg() ;
+    arg(argc,argv) ;
     return(0) ;
     }
 
