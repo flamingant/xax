@@ -20,7 +20,9 @@ class ARGITEM {
     ARGITEM(ARGSET &set,
 	    char *help_,
 	    char *argname_,
-	    char *valuename_) ;
+	    char *valuename_,
+	    int	(*accept)(char *,char *,void *)
+	    ) ;
 
     virtual int match(char *name)
 {
@@ -38,8 +40,16 @@ static int match_(ARGITEM &item,char *name)
 {
     return item.match(name) ;
     }
+
+/* accept is not a class member function because it is different
+   for every ARGITEM and so if it was virtual it would require a
+   different subclass for every ARGITEM
+   */
+
+    int		(*accept)(char *,char *,void *) ;
 } ;
 
+/* ================================================================ */
 class ARGSET {
     public:
     char *help ;
@@ -77,10 +87,12 @@ class ARGSET {
 ARGITEM::ARGITEM(ARGSET &set,
 		 char *help_,
 		 char *argname_,
-		 char *valuename_) :
+		 char *valuename_,
+		 int	(*accept_)(char *,char *,void *)) :
     help(help_),
     argname(argname_),
-    valuename(valuename_)
+    valuename(valuename_),
+    accept(accept_)
 {
     set.additem(this) ;
     printf("created ARGITEM\n") ;
@@ -102,22 +114,30 @@ http://www.stroustrup.com/C++11FAQ.html#inheriting
 /* ================================================================ */
 extern ARGSET as ;
 
+static int argf__debug_mask(char *name,char *value,void *a0)
+{
+    return(1) ;
+    }
+
 static ARGITEM arg__zzz(as,
 		      "Set main mode of program",
 		      "m",
-		      "MODE"
+		      "MODE",
+			argf__debug_mask
 		      ) ;
 
 static ARGITEM arg__yyy(as,
 		      "Y",
 		      "YY",
-		      "YYY"
+		      "YYY",
+			argf__debug_mask
 		      ) ;
 
 static ARGITEM_M arg__ppp(as,
 		      "P help",
 		      "Proz",
-		      "what value?"
+		      "what value?",
+			argf__debug_mask
 		      ) ;
 
 ARGSET as("Main") ;
@@ -130,6 +150,7 @@ static void arg(int argc,char **argv)
 	ARGITEM *item = as.itemfindbyname(argv[i]) ;
 	if (item) {
 	    item->prin() ;
+	    item->accept(0,0,0) ;
 	    }
 	else {
 	    printf("unknown arg %s\n",argv[i]) ;
