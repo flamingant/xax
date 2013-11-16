@@ -10,3 +10,7 @@
 ;(gdb "d:/g/gdb-7.2/bin/gdb-python27 -i=mi mi2ly.exe")
 (setq gdb-exec-file "c.exe")
 (setq gdb-exec-file "tc.exe")
+
+(apropos "process")
+
+(delete-process "gud-tc.exe")
