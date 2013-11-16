@@ -172,3 +172,13 @@
   suggests the local changes get rebased onto new version
   of origin
   here's a change made on the cpp branch
+
+* compilers
+** not supported in __STRICT_ANSI__ (e.g c++11)
+   strdup
+   alloca
+   stricmp
+   vsnprintf
+   fileno
+   bzero
+   typeof	gnu
