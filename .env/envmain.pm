@@ -30,10 +30,26 @@ sub gtail {
 
 use Getopt::Long ;
 
+use Data::Dumper ;
+
+sub fix {
+    my $a = shift ;
+    for my $k (keys %$a) {
+	while ($a->{$k} =~ m!\$(\w+)!) {
+#	    print "=======before $k $1 =========\n" ;
+#	    print Dumper $a ;
+	    $a->{$k} =~ s!\$(\w+)!$a->{$1}!e ;
+#	    print "======= after $k $1 =========\n" ;
+#	    print Dumper $a ;
+#	    print "=============================\n" ;
+	}
+    }
+}
 sub getargd {
     my @a = grep m!\.locate!,@INC ;
     my $locate = $a[0] ;
     my $env = $hostenv->{$arg->{host}} ;
+    fix $env ;
 
     for (keys %$env) {$arg->{$_} ||= $env->{$_}}
 
