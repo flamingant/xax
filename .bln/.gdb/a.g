@@ -11,7 +11,7 @@ set confirm off
 set args --hexec=/timer --hexec=/irc
 set print pretty
 set non-stop off
-set directories !!$drive!!/.master/pu/c
+set directories !!$devroot!!/pu/c
 
 define done
 set ufs.quit=1
