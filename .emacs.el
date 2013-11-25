@@ -72,12 +72,7 @@
 (define-key vc-extended-map "\C-a" 'git-commit-amend)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(top-level)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(find-file ".bwg/.gdb.el")
-(find-file "e:/emacs/vc-x.el")
-
-(defun my-path-set () (interactive)
+(defun win-boo-path-set () (interactive)
   (path-set
    `(
      "."
@@ -94,7 +89,20 @@
      "d:\\p\\postgreSQL\\9.2\\bin"
      )))
 
-(my-path-set)
+(cond 
+ ((eq system-type 'windows-nt)
+  (win-boo-path-set)
+  )
+ )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(top-level)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(find-file ".bwg/.gdb.el")
+(find-file "e:/emacs/vc-x.el")
+
+
+
 
 (top-level)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
