@@ -70,6 +70,7 @@ __END__
   )
 
 (defun gdb-kill ()
+  (or (boundp 'gud-comint-buffer) (setq gud-comint-buffer nil))
   (let ((process (get-buffer-process gud-comint-buffer)))
    (cond
     (process
