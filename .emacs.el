@@ -32,25 +32,6 @@
 
 (add-hook 'org-mode-hook 'turn-on-font-lock)
 
-(find-file ".bwg/.gdb.el")
-(find-file "e:/emacs/vc-x.el")
-
-(defun my-path-set () (interactive)
-  (path-set
-   `(
-     "."
-     "d:\\E\\Emacs\\emacs\\bin"
-     "d:\\bin"
-     "d:\\p\\perl\\bin"
-     "d:\\cygwin\\bin"
-     "d:\\G\\Git\\bin"
-     "C:\\WINDOWS\\system32"
-     "C:\\WINDOWS"
-     "C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0"
-     "d:\\p\\postgreSQL\\9.2\\bin"
-     )))
-(my-path-set)
-
 (defun c-other-file-gen (&optional name)
   "The 'gen' linked file"
   (or name (setq name (buffer-file-name)))
@@ -68,21 +49,13 @@
 	   '(linked-file 'gen)
 	   )
 
-(top-level)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-help-map
-
-(define-key global-map (read-kbd-macro "H-h H-f") 'describe-function)
-
 (defmacro cfs (&rest stuff)
   `(let ((case-fold-search t) (case-replace t))
      ,@stuff)
   )
-(cfs (query-replace-regexp "tline" "tanno"))
 
-(setq grep-command "grep")
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define-key global-map "\C-x\C-v" vc-prefix-map)
 (setq vc-extended-map (make-sparse-keymap))
 (define-key vc-prefix-map "\C-v" vc-extended-map)
@@ -98,5 +71,37 @@ help-map
 (define-key vc-extended-map "\C-v" 'git-commit-repeat)
 (define-key vc-extended-map "\C-a" 'git-commit-amend)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(top-level)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(find-file ".bwg/.gdb.el")
+(find-file "e:/emacs/vc-x.el")
 
+(defun my-path-set () (interactive)
+  (path-set
+   `(
+     "."
+     "d:\\E\\Emacs\\emacs\\bin"
+     "d:\\bin"
+     "d:\\p\\perl\\bin"
+     "d:\\cygwin\\bin"
+;     "c:\\MinGW\\bin"
+;     "c:\\MinGW\\msys\\1.0\\bin"
+     "d:\\G\\Git\\bin"
+     "C:\\WINDOWS\\system32"
+     "C:\\WINDOWS"
+     "C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0"
+     "d:\\p\\postgreSQL\\9.2\\bin"
+     )))
+
+(my-path-set)
+
+(top-level)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-key global-map (read-kbd-macro "H-h H-f") 'describe-function)
+
+(cfs (query-replace-regexp "tline" "tanno"))
+
+(setq grep-command "grep")
 
