@@ -932,10 +932,16 @@ static int argf__hexec(char *name,char *value,void *a0)
     return(ASF_ARGACCEPTED) ;
 }
 
+#ifdef __linux__
+extern void InstallService(void) {}
+extern void UninstallService(void) {}
+extern void RunService(void) {}
+#endif
+
 /* ~~arg(help => "Install the HTTP server service",type => "command")~~ */
 static int argf__http_service_install(char *name,char *value,void *a0)
 {
-    extern void InstallService() ;
+    extern void InstallService(void) ;
     InstallService();
     return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
 }
@@ -943,7 +949,7 @@ static int argf__http_service_install(char *name,char *value,void *a0)
 /* ~~arg(help => "Uninstall the HTTP server service",type => "command")~~ */
 static int argf__http_service_uninstall(char *name,char *value,void *a0)
 {
-    extern void UninstallService() ;
+    extern void UninstallService(void) ;
     UninstallService();
     return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
 }
@@ -951,7 +957,7 @@ static int argf__http_service_uninstall(char *name,char *value,void *a0)
 /* ~~arg(help => "Start the HTTP server service",type => "command")~~ */
 static int argf__http_service_start(char *name,char *value,void *a0)
 {
-    extern void RunService() ;
+    extern void RunService(void) ;
     RunService() ;
     return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
 }
