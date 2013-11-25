@@ -88,7 +88,7 @@ libnpu.a:	$(LIBNPU_OBJ)
 		$(AR) cru $@ $(LIBNPU_OBJ)
 		ranlib $@
 
-lgen.mk:	lgen.pl ../lgen.pm ./lgen.pm
+lgen.mk:	lgen.pl ../lgen.pm ./lgen.pm ../tclgen.pm
 		perl -I.. lgen.pl make $@ ;
 
 gen.c:		$(AOBJSGEN) lgen.mk
