@@ -807,7 +807,7 @@ extern u32 ht_uff(UF *uf,int m,u32 a)
 	break ;
     case UFM_STATE_REPORT:
 	if (uf_send_direct(uf,UFM_TRACE_OK,m)) {
-	    printf("action: %d state: %08x fail: %08x\n",a,ht->state,ht->fail) ;
+	    printf("action: %lu state: %08x fail: %08x\n",a,ht->state,ht->fail) ;
 	    }
 	return(0) ;
     case UFM_ACTION:				/*A*/

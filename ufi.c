@@ -127,7 +127,7 @@ static u32 oma_z(UFIC *c,int m,u32 a)
 	printf("first\n") ;
 	break ;
     case UFIM_NEXT:
-	printf("next %s\n",c->next) ;
+	printf("next %p\n",c->next) ;
 	break ;
     case UFIM_LAST:
 	printf("last\n") ;
