@@ -932,12 +932,6 @@ static int argf__hexec(char *name,char *value,void *a0)
     return(ASF_ARGACCEPTED) ;
 }
 
-#ifdef __linux__
-extern void InstallService(void) {}
-extern void UninstallService(void) {}
-extern void RunService(void) {}
-#endif
-
 /* ~~arg(help => "Install the HTTP server service",type => "command")~~ */
 static int argf__http_service_install(char *name,char *value,void *a0)
 {

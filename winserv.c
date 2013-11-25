@@ -2,6 +2,13 @@
 extern "C" {
 #endif
 
+#ifdef __linux__
+extern void InstallService(void) {}
+extern void UninstallService(void) {}
+extern void RunService(void) {}
+
+#else	/* ifdef __linux__ */
+
 // Beeper Service.cpp
 
 // Copyright (c) 2001-2002 Jarmo Muukka. All rights reserved.
@@ -179,6 +186,7 @@ void UninstallService()
 	}
 }
 
+#endif	/* (else) ifdef __linux__ */
 
 #ifdef __cplusplus /*Z*/
 }
