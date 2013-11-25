@@ -11,11 +11,12 @@ __END__
 ## HOST: !!$host!!
 ##
 
+DOTEXE =	!!$exec_suffix!!
+
 DEVDRIVE =	!!$drive!!
-DEVROOT =	$(DEVDRIVE)/.master/
+DEVROOT =	!!$devroot!!
 SQLITE =	!!$sqlite!!
 LIB_JANSSON =   !!$jansson!!
-AEXE =		tc!!$exec_suffix!!
 
 !!gtail()!!
 __ENDEND__

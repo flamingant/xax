@@ -55,6 +55,12 @@ CPPWARN =	$(WARN) \
 		@echo $(CC) $(CPPFLAGS) $(CDEFS_V) -c $<
 		@$(CC) $(CPPFLAGS) $(CPPWARN) $(CINCLUDE) $(CDEFS_I) $(CDEFS_V) -c $<
 
+$(CPPSRC) :	CC := $(CC) -x c++
+
+$(CPPSRC) :	CFLAGS = $(CPPFLAGS)
+
+$(CPPSRC) :	CWARN = $(CPPWARN)
+
 ################################################################
 #LDFLAGS +=	-mconsole
 #LDFLAGS +=	-mno-cygwin -lmingw32
@@ -70,12 +76,6 @@ ALIBS +=	-lstdc++
 include lgen.mk
 
 CPPSRC = 	main.o
-
-$(CPPSRC) :	CC := $(CC) -x c++
-
-$(CPPSRC) :	CFLAGS = $(CPPFLAGS)
-
-$(CPPSRC) :	CWARN = $(CPPWARN)
 
 AOBJSGEN =	$(AOBJSDEP)
 

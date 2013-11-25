@@ -14,7 +14,7 @@ __END__
 DOTEXE =	!!$exec_suffix!!
 
 DEVDRIVE =	!!$drive!!
-DEVROOT =	!!$master!!
+DEVROOT =	!!$devroot!!
 SQLITE =	!!$sqlite!!
 LIB_JANSSON =   !!$jansson!!
 
