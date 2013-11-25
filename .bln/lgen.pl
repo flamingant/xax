@@ -1,5 +1,7 @@
 #!perl
 
+use Data::Dumper ;
+
 use File::Basename ;
 use File::Path ;
 use Cwd ;
@@ -71,6 +73,12 @@ sub object {
     push @object,[$name,{@_}] ;
 }
 
+sub macro {
+    my $name = shift ;
+    dp 1,"adding macro %s\n",$name ;
+    push @macros,[$name,join(" ",@_)] ;
+}
+
 ################################################################
 =pod
 include .gen/{module}.g files for all object files given in gen.pm
@@ -104,11 +112,18 @@ sub init_version {
     close V ;
 }
 
+sub dump_items {
+    my $dump = Data::Dumper->new([$allitems]) ;
+    my $i = $dump->Terse(1)->Indent(1)->Dump ; ;
+    print $i ;
+}
+
 sub init {
     $out = shift ;
     push @INC,".gen/.tools/init",".gen/.tools/stub", ;
     if ($out) {open O,">$out" ;} else {*O = *STDOUT ;}
     require_all ;
+#    dump_items ;
     init_version ;
     init_c("end") ;
     for (@{$gen->{"i"}}) {print O $_,"\n"}
@@ -131,6 +146,11 @@ sub make {
 	require "$file_g" ;
     }
 
+    for (@macros) {
+	my ($name,$value) = @$_ ;
+	gen_add_mk "$name := $value\n" ;
+    }
+
     for my $g (@linkgroups) {
 	gen_add_mk "$g := \\" ;
 	for $o (@object) {
@@ -141,6 +161,8 @@ sub make {
 	}
     gen_add_mk "\t\t\n" ;
     }
+
+    gen_add_mk "all:\t\t%s",join(" ",@targets) ;
 
     for (@{$gen->{"mk"}}) {print O $_,"\n"}
 
