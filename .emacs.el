@@ -1,7 +1,5 @@
 (bake-tool-select 'gcc)
 
-(qb-define (kbd "C-d C-b") ".bwg" t)
-
 (qb-define (kbd "C-a C-m") "main.c" t)
 (qb-define (kbd "C-a C-u") "uf.c" t)
 (qb-define (kbd "C-u C-h") "uf.h" t)
@@ -89,9 +87,32 @@
      "d:\\p\\postgreSQL\\9.2\\bin"
      )))
 
+(defun gdb-qb (d)
+  (let ((default-directory d))
+    (qb-define (kbd "C-d C-b") "." t)
+    (qb-define (kbd "C-g C-e") ".gdb.el" t)
+    (qb-define (kbd "C-g C-d") ".gdb" t)
+    (qb-define (kbd "C-g C-a") ".gdb/a" t)
+    )
+  )
+
+(defun boo-win-init () 
+  (gdb-qb ".bwg")
+  (win-boo-path-set)
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun boo-gnu-init () 
+  (gdb-qb ".bln")
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (cond 
  ((eq system-type 'windows-nt)
-  (win-boo-path-set)
+  (boo-win-init)
+  )
+ ((eq system-type 'gnu/linux)
+  (boo-gnu-init)
   )
  )
 
