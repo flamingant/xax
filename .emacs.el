@@ -88,12 +88,10 @@
      )))
 
 (defun gdb-qb (d)
-  (let ((default-directory d))
-    (qb-define (kbd "C-d C-b") "." t)
-    (qb-define (kbd "C-g C-e") ".gdb.el" t)
-    (qb-define (kbd "C-g C-d") ".gdb" t)
-    (qb-define (kbd "C-g C-a") ".gdb/a" t)
-    )
+  (qb-define (kbd "C-d C-b") d t)
+  (qb-define (kbd "C-g C-e") (format "%s/.gdb.el" d) t)
+  (qb-define (kbd "C-g C-d") (format "%s/.gdb" d) t)
+  (qb-define (kbd "C-g C-a") (format "%s/.gdb/a" d) t)
   )
 
 (defun boo-win-init () 
