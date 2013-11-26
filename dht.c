@@ -269,6 +269,13 @@ static void ht_response_body(UF *uf,char *s,char *e)
 {
     }
 
+static void send_response_body(UF *uf,RBP *p)
+{
+//    log_puts_escape_nl(ht_data_rcv,p->mtu->s) ;
+//    log_puts_c(ht_data_rcv,"\n") ;
+    uf_send(uf,UFM_HT_RESPONSE_BODY,(u32) p) ;
+    }
+
 static void ht_response_body_complete(UF *uf,HT *ht)
 {
     RBP p[1] ;
@@ -282,13 +289,13 @@ static void ht_response_body_complete(UF *uf,HT *ht)
 	    mtmalloc(p->mtu,65536) ;
 	    GZRead_mt(p->mtz,p->mtu) ;
 	    *(p->mtu->c) = 0 ;
-	    uf_send(uf,UFM_HT_RESPONSE_BODY,(u32) p) ;
+	    send_response_body(uf,p) ;
 	    free(p->mtu->s) ;
 	    return ;
 	}
     }
-   p->mtu[0] = p->mtz[0] ;
-   uf_send(uf,UFM_HT_RESPONSE_BODY,(u32) p) ;
+   p->mtu[0] = p->mtz[0] ;	/* uncompressed == compressed */
+   send_response_body(uf,p) ;
  }
 }
 
@@ -711,7 +718,6 @@ extern UF *deluge_ht_create(UFF uff,char *post,void *cp)
     MTALLOCA(mtpost,strlen(post)+100) ;
     mtprintf(mtpost,post,g.auth.seq) ;
     ht = ht_create("POST","erebus.feralhosting.com","earwig/deluge/json",mtpost->s) ;
-    ht->cookie = g.auth.cookie ;
     uf = uf_create(uff,ht,cp) ;
     uf->d.ht->seq = g.auth.seq++ ;
     return uf ;
@@ -746,6 +752,7 @@ static int ht_action(UF *uf,HT *ht)
 	goto done ;
 	}
     if (HT_ISNEED(ht,HTS_REQUEST)) {
+	ht->cookie = g.auth.cookie ;
 	ht_request_build(ht) ;
 	ht_request_send(ht) ;
 	goto done ;
@@ -1784,6 +1791,8 @@ static u32 dgts_uff(UF *uf,int m,u32 a)
 	sqlite3_finalize(sc->stmt) ;
 	transaction_end() ;
 	free(sc) ;
+	break ;
+    case UFM_ACTION:
 	break ;
     case UFM_HT_RESPONSE_JSON:
 	transaction_begin() ;
