@@ -37,10 +37,10 @@ CDEFS_I +=	-DDEBUG=1 -D__$(@F:.o=_c)
 
 .c.o:
 		@perl -x.. ../ugen.pl gen $(<F)
-#		@echo $(CC) $(CFLAGS) $(CDEFS_V) -c $<
-#		@$(CC) $(CFLAGS) $(CWARN) $(CINCLUDE) $(CDEFS_I) $(CDEFS_V) -c $<
-		@echo $(CC) -x c++ $(CPPFLAGS) $(CDEFS_V) -c $<
-		@$(CC) -x c++ $(CPPFLAGS) $(CPPWARN) $(CINCLUDE) $(CDEFS_I) $(CDEFS_V) -c $<
+		@echo $(CC) $(CFLAGS) $(CDEFS_V) -c $<
+		@$(CC) $(CFLAGS) $(CWARN) $(CINCLUDE) $(CDEFS_I) $(CDEFS_V) -c $<
+#		@echo $(CC) -x c++ $(CPPFLAGS) $(CDEFS_V) -c $<
+#		@$(CC) -x c++ $(CPPFLAGS) $(CPPWARN) $(CINCLUDE) $(CDEFS_I) $(CDEFS_V) -c $<
 
 ################################################################
 CPPFLAGS +=	$(CCDBG) -std=gnu++11
@@ -75,7 +75,7 @@ ALIBS +=	-lstdc++
 
 include lgen.mk
 
-CPPSRC = 	main.o
+#CPPSRC = 	main.o
 
 AOBJSGEN =	$(AOBJSDEP)
 
