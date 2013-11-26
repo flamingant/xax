@@ -42,7 +42,7 @@ object_a "ssh_scp.c" ;
 object_a "ssh.c" ;
 
 object_a "feral.c" ;
-object_a "inserver.c" ;
+#object_a "inserver.c" ;
 object_a "winserv.c" ;
 
 object_a "uncollect.c" ;
