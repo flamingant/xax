@@ -27,7 +27,7 @@ typedef u32 (*MMF)(MMO *,int,u32) ;
 #define MMM_GET_DESC		4
 #define MMM_GET_ARGITEMS	5
 
-typedef int (*MMENTRY)(int,char **,char *) ;
+typedef int (*MMENTRY)(int,char **,MMC *) ;
 
 struct struct_MMO {
     void	*c ;

@@ -46,6 +46,13 @@ static int argf__help(char *name,char *value,void *a0)
     return(ASF_DEFERRED) ;		/* keep arg for mode help */
 }
 
+/* ~~arg(help => "Don't load standard init files")~~ */
+static int argf__no_init(char *name,char *value,void *a0)
+{
+    g.noinit = 1 ;
+    return(ASF_ARGACCEPTED) ;
+}
+
 #include	".gen/main.h"
 
 /* ================================================================ */
@@ -62,8 +69,8 @@ static int long_arg_fun(char *name,char *value,void *a0)
 /* ~~arg(argname => 'd',help => "Change directory to DIR",value => "DIR",inline => 1,short => 1)~~ */
 /* ~~arg(argname => 'v',help => "Show version and exit",inline => 1,short => 1)~~ */
 /* ~~arg(argname => 'y',help => "Merge command line parameters from file",inline => 1,short => 1)~~ */
+
 /* ~~arg(argname => 'yank-args',value => "FILE",help => "Merge command line parameters from file",inline => 1)~~ */
-/* ~~arg(argname => 'no-init',help => "Don't load standard init files",inline => 1)~~ */
 
 static int main_0(int argc,char **argv)
 {
@@ -201,7 +208,7 @@ static int main_final(int argc,char **argv)
     argc = arg_compress(argc,argv) ;
 {
     MMENTRY entry = (MMENTRY) mm->f(mm,MMM_GET_ENTRY,0) ;
-    return(entry(argc,argv,g.mode)) ;
+    return(entry(argc,argv,&g)) ;
     }
     }
 

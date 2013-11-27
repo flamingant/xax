@@ -148,12 +148,14 @@ static int sm_server(int argc, char *argv[])
     }
 
 /* ================================================================ */
+#include	"mainmode.h"
+
 static int long_arg_fun(char *name,char *value,void *a0)
 {
     return(ASF_ARGIGNORED) ;
     }
 
-static int ssh_main(int argc,char **argv,char *mode)
+static int ssh_main(int argc,char **argv,MMC *c)
 {
     int		i ;
     for (i = 1 ; i < argc ; i++) {

@@ -1679,8 +1679,9 @@ errorExit:
 /* ================================================================ */
 #include	"pu/mt.h"
 #include	"common.h"
+#include	"mainmode.h"
 
-static int gus_main(int argc, char **argv,char *mode)
+static int gus_main(int argc, char **argv,MMC *c)
 {
     int	i ;
     MT	mti[1] ;

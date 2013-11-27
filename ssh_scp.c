@@ -291,12 +291,13 @@ done_1:
 /* ================================================================ */
 #include	<string.h>
 #include	"arg.h"
+#include	"mainmode.h"
 
 static struct {
     char	*smode ;
     } g ;
 
-static int ssh_scp_main(int argc, char *argv[],char *mode)
+static int ssh_scp_main(int argc, char *argv[],MMC *c)
 {
     if (!(g.smode = arg_get_submode(argc,argv))) g.smode = "3" ;
     argc = arg_compress(argc,argv) ;

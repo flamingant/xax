@@ -1059,16 +1059,15 @@ extern u32 http_atinit(int phase,u32 a)
 /* ~# use atinit ; atinit::register() ; #~ */
 
 /* ================================================================ */
-static int http_main(int argc,char **argv,char *mode)
-{
-    int		i ;
+#include	"mainmode.h"
 
+static int http_main(int argc,char **argv,MMC *c)
+{
     hsg_init_static() ;
 
-    if ((i = arg_peek(argc,argv,"--no-init")) == -1) {
+    if (!c->noinit) {
 	arg_expand_try_file(&argc,&argv,".http") ;
 	}
-    else argv[i] = 0 ;
 
     argc = log_init(argc,argv) ;
 

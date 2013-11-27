@@ -25,7 +25,9 @@ extern void tr_sha1 (uint8_t * setme, const void * content1, int content1_len, .
 }
 
 /* ================================================================ */
-static int s_main(int argc,char **argv,char *mode)
+#include	"mainmode.h"
+
+static int s_main(int argc,char **argv,MMC *c)
 {
     uint8_t sha[SHA_DIGEST_LENGTH];
     tr_sha1(sha,"hello world",11,0,0) ;

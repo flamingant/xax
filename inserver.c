@@ -537,7 +537,9 @@ static int inserver(char *arg)
     return(invoke_CreateProcess(exe->s,cmd->s)) ;
     }
 
-static int is_main(int argc, char **argv,char *mode)
+#include	"mainmode.h"
+
+static int is_main(int argc, char **argv,MMC *c)
 {
     char *arg = argv[1] ;
     conf_try_all(mode) ;

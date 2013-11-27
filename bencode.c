@@ -303,8 +303,9 @@ void be_dump(be_node *node)
 
 #include	"arg.h"
 #include	"common.h"
+#include	"mainmode.h"
 
-static int ben_main(int argc,char **argv,char *mode)
+static int ben_main(int argc,char **argv,MMC *c)
 {
     char	*file = argv[1] ;
 {

@@ -160,7 +160,9 @@ static void arg(int argc,char **argv)
     }
 
 /* ================================================================ */
-static int cpp_main(int argc,char **argv,char *mode)
+#include	"mainmode.h"
+
+static int cpp_main(int argc,char **argv,MMC *c)
 {
     arg(argc,argv) ;
     return(0) ;

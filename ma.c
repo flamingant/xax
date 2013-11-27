@@ -109,14 +109,15 @@ static int long_arg_fun(char *name,char *value,void *a0)
     }
 
 /* ================================================================ */
-static int a_main(int argc,char **argv,char *mode)
+#include	"mainmode.h"
+
+static int a_main(int argc,char **argv,MMC *c)
 {
     int		i ;
 
-    if ((i = arg_peek(argc,argv,"--no-init")) == -1) {
+    if (!c->noinit) {
 	arg_expand_try_file(&argc,&argv,".ma") ;
 	}
-    else argv[i] = 0 ;
 
     for (i = 1 ; i < argc ; i++) {
 	char *arg = argv[i] ;
