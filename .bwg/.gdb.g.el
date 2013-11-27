@@ -70,16 +70,20 @@ __END__
   )
 
 (defun gdb-kill ()
-  (or (boundp 'gud-comint-buffer) (setq gud-comint-buffer nil))
-  (let ((process (get-buffer-process gud-comint-buffer)))
-   (cond
-    (process
-     (save-excursion
-      (set-buffer gud-comint-buffer)
-      (comint-interrupt-subjob)
-      (comint-send-string process "kill\n")
+ (cond
+  ((eq mode 'compilation-mode)
+   (or (boundp 'gud-comint-buffer) (setq gud-comint-buffer nil))
+   (let ((process (get-buffer-process gud-comint-buffer)))
+     (cond
+      (process
+       (save-excursion
+	 (set-buffer gud-comint-buffer)
+	 (comint-interrupt-subjob)
+	 (comint-send-string process "kill\n")
+	 )
+       )
+      )
      )
-    )
    )
   )
  )
