@@ -63,6 +63,9 @@ static int long_arg_fun(char *name,char *value,void *a0)
 /* ~~arg(argname => 'h',help => "Display this help",inline => 1,short => 1)~~ */
 /* ~~arg(argname => 'd',help => "Change directory to DIR",value => "DIR",inline => 1,short => 1)~~ */
 /* ~~arg(argname => 'v',help => "Show version and exit",inline => 1,short => 1)~~ */
+/* ~~arg(argname => 'y',help => "Merge command line parameters from file",inline => 1,short => 1)~~ */
+/* ~~arg(argname => 'yank-args',value => "FILE",help => "Merge command line parameters from file",inline => 1)~~ */
+/* ~~arg(argname => 'no-init',help => "Don't load standard init files",inline => 1)~~ */
 
 static int main_0(int argc,char **argv)
 {
