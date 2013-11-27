@@ -89,6 +89,7 @@
 
 (defun gdb-qb (d)
   (qb-define (kbd "C-d C-b") d t)
+  (qb-define (kbd "C-m C-m") (format "%s/makefile" d) t)
   (qb-define (kbd "C-g C-e") (format "%s/.gdb.el" d) t)
   (qb-define (kbd "C-g C-d") (format "%s/.gdb" d) t)
   (qb-define (kbd "C-g C-a") (format "%s/.gdb/a" d) t)
