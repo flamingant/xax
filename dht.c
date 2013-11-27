@@ -774,7 +774,7 @@ static int ht_action(UF *uf,HT *ht)
 	goto done ;
 	}
     if (HT_ISNEED(ht,HTS_REQUEST)) {
-	ht->cookie = g.auth.cookie ;
+	if (!(ht->cookie)) ht->cookie = g.auth.cookie ;
 	ht_request_build(ht) ;
 	ht_request_send(ht) ;
 	goto done ;
