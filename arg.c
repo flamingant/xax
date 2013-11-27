@@ -103,12 +103,15 @@ extern int arg_compress(int argc,char **argv)
 {
     char	**a = argv ;
     int		i ;
+    int		ndel ;
     for (i = 0 ; i < argc ; i++) {
 	if (*argv)
 	    *(a++) = *argv ;
 	argv++ ;
 	}
-    return(argc + (a - argv)) ;
+    ndel = (argv - a) ;
+    for (i = ndel ; i > 0 ; ) a[--i] = 0 ;
+    return(argc - ndel) ;
     }
 
 extern int arg_read_simple(int argc,char **argv,
