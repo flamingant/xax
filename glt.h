@@ -36,6 +36,8 @@ extern GLT *glrassoc(GLT *,GLT_CDR_T,GLTCMP) ;
 extern GLT_CDR_T glgetif(GLT *,GLT_CAR_T,GLTCMP) ;
 extern GLT_CAR_T glrgetif(GLT *,GLT_CDR_T,GLTCMP) ;
 
+extern char *gltget_c(GLT *t,int v) ;
+
 #endif
 
 #ifdef __cplusplus /*Z*/

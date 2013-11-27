@@ -62,6 +62,13 @@ extern GLT_CAR_T glrgetif(GLT *t,GLT_CDR_T v,GLTCMP cmp)
     return tt ? tt->car : 0 ;
     }
 
+extern char *gltget_c(GLT *t,int v)
+{
+    GLT *tt = glassq(t,(GLT_CAR_T) v) ;
+    if (tt) return((char *) tt->cdr) ;
+    return "*unknown*" ;
+    }
+
 #ifdef __cplusplus /*Z*/
 }
 #endif
