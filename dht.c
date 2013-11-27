@@ -539,6 +539,21 @@ SSL_write(ssl->handle, mem, (int)len);
 ssize_t nread = (ssize_t)SSL_read(ssl->handle, buf, (int)buffersize);
 */
 
+#if 0
+#define SSL_ERROR_NONE			0
+#define SSL_ERROR_SSL			1
+#define SSL_ERROR_WANT_READ		2
+#define SSL_ERROR_WANT_WRITE		3
+#define SSL_ERROR_WANT_X509_LOOKUP	4
+#define SSL_ERROR_SYSCALL		5
+#define SSL_ERROR_ZERO_RETURN		6
+#define SSL_ERROR_WANT_CONNECT		7
+#define SSL_ERROR_WANT_ACCEPT		8
+#endif
+
+/* ~# use decode ; #~ */
+/* ~~define_decode("SSL_\\w+")~~ */
+
 extern const char *ssl_msg_type2(int m)
 {
     switch (m) {
@@ -627,6 +642,10 @@ static int cert_verify_callback(int ok, X509_STORE_CTX *ctx)
     return 0 ;
     }
 
+#include	"glt.h"
+
+GLT glt_SSL_[] ;
+
 static void ht_ssl_connect(HT *ht)
 {
     SSLHT	*ssl = ht->ssl ;
@@ -664,7 +683,7 @@ static void ht_ssl_connect(HT *ht)
 	    break ;
 	    }
 	detail = SSL_get_error(ssl->handle, err) ;
-	log_printf(ssl_ls,"SSL_connect returns %d - detail %d",err) ;
+	log_printf(ssl_ls,"SSL_connect returns %d - detail %d (%s)",err,detail,gltget_c(glt_SSL_,detail)) ;
 	}
     }
     }
