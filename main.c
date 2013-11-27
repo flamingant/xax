@@ -45,7 +45,7 @@ static int argf__mode(char *name,char *value,void *a0)
 static int argf__help(char *name,char *value,void *a0)
 {
     g.help = 1 ;
-    return(ASF_ARGIGNORED) ;		/* keep arg for mode help */
+    return(ASF_DEFERRED) ;		/* keep arg for mode help */
 }
 
 #include	".gen/main.h"
