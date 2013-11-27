@@ -13,11 +13,9 @@ extern "C" {
 #include	"common.h"
 #include	"atinit.h"
 
-static struct {
-    int		version_show ;
-    char	*mode ;
-    int		help ;
-    } g = {
+#include	"mainmode.h"
+
+static MMC g = {
     .version_show = 0,
     } ;
 
@@ -108,8 +106,6 @@ static int main_0(int argc,char **argv)
     }
 
 /* ================================================================ */
-#include	"mainmode.h"
-
 static void mmo_map(void (*fun)(MMO *,u32),u32 a)
 {
     extern MMO *mainmode_initvec[] ;

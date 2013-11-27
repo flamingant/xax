@@ -9,6 +9,13 @@ extern "C" {
 #include	<pu/type.h>
 #endif
 
+typedef struct {
+    char	*mode ;
+    int		version_show ;
+    int		help ;
+    int		noinit ;
+    } MMC ;
+
 typedef struct struct_MMO MMO ;
 
 typedef u32 (*MMF)(MMO *,int,u32) ;
