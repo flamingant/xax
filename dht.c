@@ -700,6 +700,9 @@ static int ht_recv(HT *ht,void *buf, size_t len)
 {
     int		n ;
     if (ht->ssl) {
+	if (!ht->ssl->handle) {
+	    return -1 ;
+	    }
 	n = SSL_read(ht->ssl->handle, buf,len) ;
 	}
     else {
