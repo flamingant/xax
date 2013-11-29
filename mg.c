@@ -8,6 +8,7 @@ extern "C" {
 #include	<stdlib.h>
 
 #include	"arg.h"
+#include	"error.h"
 #include	"common.h"
 
 #include	".gen/mg.h"
@@ -49,8 +50,39 @@ static int gfork(int argc,char **argv)
 /* ================================================================ */
 static int sm_a(int argc,char **argv)
 {
-    if (g.cpid = fork()) return gfork(argc,argv) ;
-    printf("%d still in main\n",getpid()) ;
+    int		din,dout ;
+    int		ipfd[2] ;
+    int		opfd[2] ;
+    if (pipe(ipfd) == -1) errorfatal("Cannot open input pipe") ;
+    if (pipe(opfd) == -1) errorfatal("Cannot open output pipe") ;
+    din = dup(0) ;
+    dout = dup(1) ;
+    close(0) ;
+    close(1) ;
+
+    dup2(opfd[0],0) ;
+    dup2(ipfd[1],1) ;
+
+    if (g.cpid = fork()) {
+	char	s[10000] ;
+	close(0) ;
+	close(1) ;
+	dup2(din,0) ;
+	dup2(dout,1) ;
+	write(opfd[1],"b main\n",7) ;
+	while (1) {
+	    int n = read(ipfd[0],s,sizeof(s)) ;
+	    s[n] = 0 ;
+	    printf("%d: {%s}\n",n,s) ;
+	    }
+    }
+    else {
+	close(ipfd[0]) ;
+	close(ipfd[1]) ;
+	close(opfd[0]) ;
+	close(opfd[1]) ;
+	gfork(argc,argv) ;
+    }
     return(RC_OK) ;
 }
 
