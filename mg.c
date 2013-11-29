@@ -15,8 +15,11 @@ extern "C" {
 /* ================================================================ */
 static struct {
     char	*smode ;
-    int		cpid ;
-    int		gpid ;
+    struct {
+	int	in ;
+	int	out ;
+	int	pid ;
+	} child ;
     struct {
 	int	dummy ;
 	} cf ;
@@ -37,12 +40,13 @@ static int argf__submode(char *name,char *value,void *a0)
 static int gfork(int argc,char **argv)
 {
     char	*path = "d:/g/gdb-python-7.5-1/bin/gdb-python27.exe" ;
-    g.gpid = execl(path,
-		   path,
-		   "-i=mi",
-		   "tc.exe",
-		   (char *) 0) ;
-    printf("%d shouldn't get here\n",getpid()) ;
+    int		e ;
+    e = execl(path,
+	      path,
+	      "-i=mi",
+	      "tc.exe",
+	      (char *) 0) ;
+    printf("pid:%d shouldn't get here\n",getpid()) ;
     exit(1) ;
     return(RC_OK) ;
 }
@@ -63,7 +67,7 @@ static int sm_a(int argc,char **argv)
     dup2(opfd[0],0) ;
     dup2(ipfd[1],1) ;
 
-    if (g.cpid = fork()) {
+    if (g.child.pid = fork()) {
 	char	s[10000] ;
 	close(0) ;
 	close(1) ;
