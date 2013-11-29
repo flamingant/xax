@@ -35,10 +35,12 @@ static int argf__submode(char *name,char *value,void *a0)
 /* ================================================================ */
 static int gfork(int argc,char **argv)
 {
-    printf("%d starting gdb\n",getpid()) ;
-    g.gpid = execl("d:/g/gdb-python-7.5-1/bin/gdb-python27.exe",
-		 "-mi",
-		 "tc.exe") ;
+    char	*path = "d:/g/gdb-python-7.5-1/bin/gdb-python27.exe" ;
+    g.gpid = execl(path,
+		   path,
+		   "-i=mi",
+		   "tc.exe",
+		   (char *) 0) ;
     printf("%d shouldn't get here\n",getpid()) ;
     exit(1) ;
     return(RC_OK) ;
