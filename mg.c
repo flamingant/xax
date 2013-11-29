@@ -52,10 +52,22 @@ static int gfork(int argc,char **argv)
 }
 
 /* ================================================================ */
+static void gp_write(char *pb,int cb)
+{
+    write(g.child.in,pb,cb) ;
+    }
+
+static void gp_puts(char *s)
+{
+    gp_write(s,strlen(s)) ;
+    }
+
+/* ================================================================ */
 static void gloop(int argc,char **argv)
 {
     char	s[10000] ;
-    write(g.child.in,"b main\n",7) ;
+    gp_puts("b main\n") ;
+    gp_puts("r\n") ;
     while (1) {
 	int n = read(g.child.out,s,sizeof(s)) ;
 	s[n] = 0 ;
