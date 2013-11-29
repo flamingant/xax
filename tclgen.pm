@@ -48,4 +48,7 @@ object_a "winserv.c" ;
 object_a "uncollect.c" ;
 
 object_a "cpp.cpp" ;
+
+object_a "mg.c" ;
+
 1;
