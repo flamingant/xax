@@ -3,6 +3,9 @@ extern "C" {
 #endif
 
 #include	<string.h>
+#include	<unistd.h>
+#include	<stdio.h>
+#include	<stdlib.h>
 
 #include	"arg.h"
 #include	"common.h"
@@ -11,6 +14,8 @@ extern "C" {
 /* ================================================================ */
 static struct {
     char	*smode ;
+    int		cpid ;
+    int		gpid ;
     struct {
 	int	dummy ;
 	} cf ;
@@ -28,8 +33,22 @@ static int argf__submode(char *name,char *value,void *a0)
 }
 
 /* ================================================================ */
+static int gfork(int argc,char **argv)
+{
+    printf("%d starting gdb\n",getpid()) ;
+    g.gpid = execl("d:/g/gdb-python-7.5-1/bin/gdb-python27.exe",
+		 "-mi",
+		 "tc.exe") ;
+    printf("%d shouldn't get here\n",getpid()) ;
+    exit(1) ;
+    return(RC_OK) ;
+}
+
+/* ================================================================ */
 static int sm_a(int argc,char **argv)
 {
+    if (g.cpid = fork()) return gfork(argc,argv) ;
+    printf("%d still in main\n",getpid()) ;
     return(RC_OK) ;
 }
 
