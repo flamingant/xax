@@ -6,6 +6,7 @@ extern "C" {
 #include	<unistd.h>
 #include	<stdio.h>
 #include	<stdlib.h>
+#include	<stdarg.h>
 
 #include	"arg.h"
 #include	"error.h"
@@ -62,12 +63,25 @@ static void gp_puts(char *s)
     gp_write(s,strlen(s)) ;
     }
 
+static void gp_vprintf(char *fmt,va_list va)
+{
+    vdprintf(g.child.in,fmt,va) ;
+    }
+
+static void gp_printf(char *fmt,...)
+{
+    va_list	va ;
+    va_start(va,fmt) ;
+    gp_vprintf(fmt,va) ;
+    }
+
 /* ================================================================ */
 static void gloop(int argc,char **argv)
 {
     char	s[10000] ;
     gp_puts("b main\n") ;
     gp_puts("r\n") ;
+    gp_printf("where\n") ;
     while (1) {
 	int n = read(g.child.out,s,sizeof(s)) ;
 	s[n] = 0 ;
