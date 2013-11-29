@@ -52,6 +52,18 @@ static int gfork(int argc,char **argv)
 }
 
 /* ================================================================ */
+static void gloop(int argc,char **argv)
+{
+    char	s[10000] ;
+    write(g.child.in,"b main\n",7) ;
+    while (1) {
+	int n = read(g.child.out,s,sizeof(s)) ;
+	s[n] = 0 ;
+	printf("%d: {%s}\n",n,s) ;
+    }
+}
+
+/* ================================================================ */
 static int sm_a(int argc,char **argv)
 {
     int		din,dout ;
@@ -68,17 +80,13 @@ static int sm_a(int argc,char **argv)
     dup2(ipfd[1],1) ;
 
     if (g.child.pid = fork()) {
-	char	s[10000] ;
 	close(0) ;
 	close(1) ;
 	dup2(din,0) ;
 	dup2(dout,1) ;
-	write(opfd[1],"b main\n",7) ;
-	while (1) {
-	    int n = read(ipfd[0],s,sizeof(s)) ;
-	    s[n] = 0 ;
-	    printf("%d: {%s}\n",n,s) ;
-	    }
+	g.child.out = ipfd[0] ;
+	g.child.in  = opfd[1] ;
+	gloop(argc,argv) ;
     }
     else {
 	close(ipfd[0]) ;
