@@ -11,7 +11,7 @@ set confirm off
 set args --hexec=/timer --hexec=/what?cmd=login
 set print pretty
 set non-stop off
-set directories !!$master!!/pu/c;!!$jansson!!/src
+set directories !!$devroot!!/pu/c;!!$jansson!!/src
 
 define done
 set ufs.quit=1
