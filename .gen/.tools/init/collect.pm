@@ -2,6 +2,11 @@
 
 =cut
 
+sub gen_collect_set_force {
+    my $set = shift ;
+    $allitems->{collect}->{$set} = [@{$allitems->{collect}->{$set}}] ;
+}
+
 sub gen_collect {
     my $set = shift ;
     my $symbol = shift ;
