@@ -1,6 +1,5 @@
 /lgen.mk
 /gen.c
-/genver.pm
 *.tmp
 *.log
 
