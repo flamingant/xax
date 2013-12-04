@@ -301,37 +301,6 @@ void be_dump(be_node *node)
 	_be_dump(node, 0);
 }
 
-#include	"arg.h"
-#include	"common.h"
-#include	"mainmode.h"
-
-static int ben_main(int argc,char **argv,MMC *c)
-{
-    char	*file = argv[1] ;
-{
-    MT		mt[1] ;
-    mt_file_contents(mt,file,0) ;
-    be_node *b = be_decoden(mt->s,MTFillSize(mt)) ;
-{
-    be_node *e = be_dict_assoc(b,"info") ;
-    e = be_dict_assoc(e,"name") ;
-    be_dump(e) ;
-    e = be_list_aref(be_dict_assoc(be_list_aref(be_dict_assoc(be_dict_assoc(b,"info"),"files"),1),"path"),0) ;
-    printf("path=%s\n",e->val.s) ;
-    }
-    
-    be_free(b) ;
-    }
-    return 0 ;
-    }
-
-/* ~# use mainmode ; #~ */
-/* ~~mode("ben",
-   desc => "bencode test mode",
-   )~~ */
-
-#include	".gen/bencode.c"
-
 #endif
 
 #ifdef __cplusplus /*Z*/

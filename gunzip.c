@@ -1676,34 +1676,6 @@ errorExit:
     return 0;
 }
 
-/* ================================================================ */
-#include	"pu/mt.h"
-#include	"common.h"
-#include	"mainmode.h"
-
-static int gus_main(int argc, char **argv,MMC *c)
-{
-    int	i ;
-    MT	mti[1] ;
-    MT	mto[1] ;
-    for (i = 1 ; i < argc ; i++) {
-	if (argv[i]) {
-	    mt_file_contents(mti,argv[i],0) ;
-	    GZRead_mt(mti,mto) ;
-	    free(mti->s) ;
-	    free(mto->s) ;
-	    }
-    }
-    return 0 ;
-}
-
-/* ~# use mainmode ; #~ */
-/* ~~mode("gus",
-   desc =>	"Unzip test mode",
-   )~~ */
-
-#include	".gen/gunzip.c"
-
 #ifdef __cplusplus /*Z*/
 }
 #endif
