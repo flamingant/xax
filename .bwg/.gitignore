@@ -4,10 +4,13 @@
 *.tmp
 *.log
 
-/.gdb.el
 /locate.mk
 /*.exe.stackdump
 /.ma
 /aa
 /bb
 /.http
+
+!cygjansson-4.dll
+!libjansson.a
+!libjansson.dll.a
