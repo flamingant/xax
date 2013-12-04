@@ -1,3 +1,6 @@
+sub gen_collect_set_force {
+}
+
 sub gen_collect {
 }
 
