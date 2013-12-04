@@ -55,6 +55,7 @@ sub mode {
 ################################################################
 sub start {
     main::gen_add_g "use collect ;\n" ;
+    main::gen_add_g "gen_collect_set_force 'mainmode' ;\n" ;
 }
 
 sub finish {
