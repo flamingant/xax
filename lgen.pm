@@ -1,6 +1,8 @@
 push @linkgroups,"LIBNPU_OBJ" ;
 sub object_l { object @_,linkgroup => "LIBNPU_OBJ"}
 
+object_l "util.c" ;
+
 object_l "gunzip.c" ;
 
 object_l "arg.c" ;
