@@ -7,8 +7,8 @@ object_l "arg.c" ;
 object_l "errors.c" ;
 object_l "dp.c" ;
 object_l "stimer.c" ;
-#object_l "bencode.c" ;
-#object_l "sha1.c" ;
+object_l "bencode.c" ;
+object_l "sha1.c" ;
 
 object_l "dts.c" ;
 
@@ -21,6 +21,13 @@ object_l "tod.c" ;
 
 object_l "gmalloc.c" ;
 object_l "glt.c" ;
+
+object_l "uf.c" ;
+object_l "ufi.c" ;
+
+object_l "log.c" ;
+
+object_l "atinit.c" ;
 
 use tclgen ;
 #use clgen ;
