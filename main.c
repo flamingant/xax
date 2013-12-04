@@ -198,7 +198,7 @@ static int main_final(int argc,char **argv)
 	strcpy(g.mode,mode) ;
 	if (!(mm = modemain_find(mode)) &&
 	    !(mm = modemain_find(0)))
-	    errorfatal("no default mode\n") ;
+	    errorfatal("No default mode was found\n") ;
 	}
     else {
 	mm = modemain_find(g.mode) ;
@@ -244,6 +244,8 @@ static int argf__debug_mask(char *name,char *value,void *a0)
     return(1) ;
     }
 
+/* ================================================================ */
+/* ~# use mainmode ; #~ */	/* force mainmode initvec */
 /* ================================================================ */
 extern int mmo_help_generic(MMO *o,MT *mt)
 {
