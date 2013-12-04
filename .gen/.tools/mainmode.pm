@@ -62,12 +62,19 @@ sub finish {
 
 ################################################################
 sub gen_h {
+    my $o ;
+    push @$o,"/* mainmode { */\n" ;
+    push @$o,"\n#include	\"mainmode.h\"\n\n" ;
+    for $item (@$reg) {
+	push @$o,"extern MMO mmo_$I{name}\[] ;\n" ;
+    }
+    push @$o,"\n/* mainmode } */\n\n" ;
+    @$o ;
 }
 
 sub gen_c {
     my $o ;
     push @$o,"/* mainmode { */\n" ;
-    push @$o,"\n#include	\"mainmode.h\"\n\n" ;
     for $item (@$reg) {
 	push @$o,"MMO mmo_$A{name} = {{
     $I{context},
