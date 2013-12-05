@@ -1,5 +1,9 @@
 (bake-tool-select 'gcc)
 
+(qb-define (kbd "C-r C-t") (// "boo/e/.p/_/T/torrent/deluge/tc"))
+(qb-define (kbd "C-r C-s") (// "boo/e/.p/stub"))
+(qb-define (kbd "C-r C-n") (// "boo/e/.p/nl"))
+
 (qb-define (kbd "C-a C-m") "main.c" t)
 (qb-define (kbd "C-a C-u") "uf.c" t)
 (qb-define (kbd "C-u C-h") "uf.h" t)
