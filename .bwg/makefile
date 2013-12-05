@@ -88,7 +88,7 @@ libnpu.a:	$(LIBNPU_OBJ)
 		$(AR) cru $@ $(LIBNPU_OBJ)
 		ranlib $@
 
-lgen.mk:	lgen.pl ../lgen.pm ./lgen.pm ../tclgen.pm
+lgen.mk:	lgen.pl ../lgen.pm ./lgen.pm ../npulgen.pm
 		perl -I.. lgen.pl make $@ ;
 
 gen.c:		$(AOBJSGEN) lgen.mk
@@ -102,7 +102,7 @@ clean:
 xclean:
 		rm -f $(ALLOBJSDEP) $(AEXE) gen.o
 
-squeaky:	clean
+squeaky:	xclean
 		rm -f ../.gen/*.c ../.gen/*.h ../.gen/*.g
 		rm -f lgen.mk locate.mk .gdb.el .gdb/a gen.c
 

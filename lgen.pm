@@ -1,38 +1,51 @@
-push @linkgroups,"LIBNPU_OBJ" ;
-sub object_l { object @_,linkgroup => "LIBNPU_OBJ"}
-
-object_l "util.c" ;
-
-object_l "gunzip.c" ;
-
-object_l "arg.c" ;
-object_l "errors.c" ;
-object_l "dp.c" ;
-object_l "stimer.c" ;
-object_l "bencode.c" ;
-object_l "sha1.c" ;
-
-object_l "dts.c" ;
-
-object_l "sql.c" ;
-object_l "vcf.c" ;
-
-object_l "jsf.c" ;
-object_l "hashtab.c" ;
-object_l "tod.c" ;
-
-object_l "gmalloc.c" ;
-object_l "glt.c" ;
-
-object_l "uf.c" ;
-object_l "ufi.c" ;
-
-object_l "log.c" ;
-
-object_l "atinit.c" ;
-
-use tclgen ;
-#use clgen ;
-
 ################################################################
-1 ;
+use npulgen ;
+
+push @linkgroups,"AOBJSDEP" ;
+push @linkgroups,"AOBJSNODEP" ;
+
+macro "AEXE",'tc$(DOTEXE)' ;
+
+push @targets,'$(AEXE)' ;
+ 
+sub object_a { object @_,linkgroup => "AOBJSDEP"}
+
+object '$(SQLITE)/$(ARCH)/sqlite3.o',linkgroup => "AOBJSNODEP" ;
+
+object_a "main.c" ;
+object_a "common.c" ;
+
+object_a "ma.c" ;
+object_a "ma_irc.c" ;
+
+object_a "http.c" ;
+object_a "ht_tc.c" ;
+
+object_a "dht.c" ;
+object_a "dht_session.c" ;
+object_a "dht_label.c" ;
+object_a "dht_move.c" ;
+#object_a "dht_alpha.c" ;
+
+object_a "ht_what.c" ;
+object_a "what_group.c" ;
+object_a "what_search.c" ;
+
+object_a "tc_sql.c" ;
+#object_a "ssl.c" ;
+
+object_a "ssh_scp.c" ;
+#object_a "ssh_sh.c" ;
+object_a "ssh.c" ;
+
+object_a "feral.c" ;
+#object_a "inserver.c" ;
+object_a "winserv.c" ;
+
+object_a "uncollect.c" ;
+
+object_a "cpp.cpp" ;
+
+object_a "mg.c" ;
+
+1;
