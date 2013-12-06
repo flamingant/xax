@@ -5,7 +5,7 @@ extern "C" {
 #include	"arg.h"
 #include	"dp.h"
 
-#include	"common.h"
+#include	"npu_util.h"
 
 #include	<unistd.h>
 #include	<stdio.h>

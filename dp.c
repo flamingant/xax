@@ -11,7 +11,7 @@ extern "C" {
 #define NEED_ERRORS_STDIO
 #include	"errors.h"
 #include	"arg.h"
-#include	"common.h"
+#include	"npu_util.h"
 
 GDBG gdbg ;
 

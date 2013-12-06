@@ -13,7 +13,7 @@ extern "C" {
 #include	<sys/time.h>
 
 #include	"arg.h"
-#include	"common.h"
+#include	"npu_util.h"
 
 #include	"log.h"
 /* ~# use collect ; collect::register_all('logsec','^LOGSEC (\w+)','$1') ; #~ */

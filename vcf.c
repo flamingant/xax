@@ -8,7 +8,7 @@ extern "C" {
 #include	"pu/mt.h"
 
 #include	"vcf.h"
-#include	"common.h"
+#include	"npu_util.h"
 
 extern int switch_state_read(char *cmd)
 {

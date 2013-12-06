@@ -238,7 +238,7 @@ extern int arg_peek(int argc,char **argv,char *s)
 /* ================================================================ */
 #include	<pu/exithook.h>
 #include	<pu/mt.h>
-#include	"common.h"
+#include	"npu_util.h"
 
 typedef struct {
   int		argc ;

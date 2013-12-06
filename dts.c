@@ -6,7 +6,7 @@ extern "C" {
 #include	<string.h>
 #include	<stdlib.h>
 
-#include	"common.h"
+#include	"npu_util.h"
 
 extern void dts_init(DATETIMESTRING *ts)
 {

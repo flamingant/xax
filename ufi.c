@@ -12,7 +12,7 @@ extern "C" {
 #include	"uf.h"
 #include	"ufi.h"
 
-#include	"common.h"
+#include	"npu_util.h"
 
 #define UF_ARG_WANT_ALL	1
 

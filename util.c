@@ -15,7 +15,7 @@ extern "C" {
 #include	<pu/regex.h>
 #include	<pu/mt.h>
 
-#include	"common.h"
+#include	"npu_util.h"
 
 extern void strcpy_lc(char *d,char *s)
 {

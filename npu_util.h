@@ -2,8 +2,8 @@
 extern "C" {
 #endif
 
-#ifndef __common_h
-#define __common_h	1
+#ifndef __npu_util_h
+#define __npu_util_h	1
 
 #ifndef __talloc_h
 #include	"talloc.h"
@@ -66,14 +66,6 @@ extern void vqlistbuild(MT *mt,...) ;
 #define stricmp strcasecmp
 #endif
 
-typedef struct {
-    int		add_paused ;
-    } GOPT ;
-
-extern GOPT gopt ;
-
-#undef __common_h
-#define __common_h	0
 #endif
 
 #ifdef __cplusplus /*Z*/
