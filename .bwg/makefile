@@ -65,24 +65,7 @@ $(CPPSRC) :	CWARN = $(CPPWARN)
 #LDFLAGS +=	-mconsole
 #LDFLAGS +=	-mno-cygwin -lmingw32
 
-ALIBSDEP =	libnpu.a
-
-ALIBS =		-L. -lnpu -L$(DEVROOT)/pu/$(ARCH) -lpu -L$(LIB_JANSSON)/src/.libs -llibjansson
-ALIBS +=	-lcrypto
-ALIBS +=	-lssl
-ALIBS +=	-lssh2
-ALIBS +=	-lstdc++
-
 include lgen.mk
-
-#CPPSRC = 	main.o
-
-AOBJSGEN =	$(AOBJSDEP)
-
-AOBJSNODEP +=	gen.o
-
-$(AEXE):	$(ALIBSDEP) $(AOBJSDEP) gen.o
-		$(CC) -o $(AEXE) $(CCDBG) $(AOBJSDEP) $(AOBJSNODEP) $(ALIBS) $(LDFLAGS)
 
 libnpu.a:	$(LIBNPU_OBJ)
 		$(AR) cru $@ $(LIBNPU_OBJ)
