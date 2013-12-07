@@ -11,9 +11,9 @@ typedef struct {
     int		level ;
     int		mask ;
     FILE	*fh ;
-    } GDBG ;
+    } GDO ;
 
-extern GDBG gdbg ;
+extern GDO gdo ;
 
 extern void dph(char *p,int n) ;
 

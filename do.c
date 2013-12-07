@@ -13,11 +13,11 @@ extern "C" {
 #include	"arg.h"
 #include	"npu_util.h"
 
-GDBG gdbg ;
+GDO gdo ;
 
 extern void dpf_va(char *fmt,va_list va)
 {
-    FILE *fh = gdbg.fh ? gdbg.fh : stderr ;
+    FILE *fh = gdo.fh ? gdo.fh : stderr ;
     vfprintf(fh,fmt,va) ;
     fflush(fh) ;
     }
@@ -32,7 +32,7 @@ extern void dpf(char *fmt,...)
 extern void dpfn(int level,char *fmt,...)
 {
     va_list	va ;
-    if (level > gdbg.level) return ;
+    if (level > gdo.level) return ;
     va_start(va,fmt) ;
     dpf_va(fmt,va) ;
     }
@@ -50,7 +50,7 @@ extern void dph(char *p,int n)
 extern void dpfm(int mask,char *fmt,...)
 {
     va_list	va ;
-    if (!(mask & gdbg.mask)) return ;
+    if (!(mask & gdo.mask)) return ;
     va_start(va,fmt) ;
     dpf_va(fmt,va) ;
     }
@@ -58,20 +58,20 @@ extern void dpfm(int mask,char *fmt,...)
 /* ================================================================ */
 extern void dpf_file_set(char *file)
 {
-    if (gdbg.fh) fclose(gdbg.fh) ;
+    if (gdo.fh) fclose(gdo.fh) ;
     if (file)
-	 gdbg.fh = fopen_and_check(file,"w") ;
-    else gdbg.fh = 0 ;
+	 gdo.fh = fopen_and_check(file,"w") ;
+    else gdo.fh = 0 ;
     }
 
 extern void dpf_level_set(int value)
 {
-    gdbg.level = value ;
+    gdo.level = value ;
     }
 
 extern void dpf_mask_set(int value)
 {
-    gdbg.mask = value ;
+    gdo.mask = value ;
     }
 
 
