@@ -3,7 +3,6 @@ extern "C" {
 #endif
 
 #include	"arg.h"
-#include	"dp.h"
 
 #include	"npu_util.h"
 
