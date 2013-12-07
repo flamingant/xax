@@ -7,7 +7,7 @@ object_l "gunzip.c" ;
 
 object_l "arg.c" ;
 object_l "errors.c" ;
-object_l "dp.c" ;
+object_l "do.c" ;
 object_l "stimer.c" ;
 object_l "bencode.c" ;
 object_l "sha1.c" ;

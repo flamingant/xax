@@ -6,7 +6,7 @@ extern "C" {
 #include	<stdarg.h>
 #include	<string.h>
 
-#include	"dp.h"
+#include	"do.h"
 
 #define NEED_ERRORS_STDIO
 #include	"errors.h"
