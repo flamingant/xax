@@ -15,48 +15,48 @@ extern "C" {
 
 GDO gdo ;
 
-extern void dpf_va(char *fmt,va_list va)
+extern void dof_va(char *fmt,va_list va)
 {
     FILE *fh = gdo.fh ? gdo.fh : stderr ;
     vfprintf(fh,fmt,va) ;
     fflush(fh) ;
     }
 
-extern void dpf(char *fmt,...)
+extern void dof(char *fmt,...)
 {
     va_list	va ;
     va_start(va,fmt) ;
-    dpf_va(fmt,va) ;
+    dof_va(fmt,va) ;
     }
 
-extern void dpfn(int level,char *fmt,...)
+extern void dofn(int level,char *fmt,...)
 {
     va_list	va ;
     if (level > gdo.level) return ;
     va_start(va,fmt) ;
-    dpf_va(fmt,va) ;
+    dof_va(fmt,va) ;
     }
 
-extern void dph(char *p,int n)
+extern void doph(char *p,int n)
 {
     if (n < 0) return ;
     while (1) {
-	dpf("%02x",*p++) ;
+	dof("%02x",*p++) ;
 	if (--n == 0) break ;
-	dpf(" ") ;
+	dof(" ") ;
 	}
     }
 
-extern void dpfm(int mask,char *fmt,...)
+extern void dofm(int mask,char *fmt,...)
 {
     va_list	va ;
     if (!(mask & gdo.mask)) return ;
     va_start(va,fmt) ;
-    dpf_va(fmt,va) ;
+    dof_va(fmt,va) ;
     }
 
 /* ================================================================ */
-extern void dpf_file_set(char *file)
+extern void dof_file_set(char *file)
 {
     if (gdo.fh) fclose(gdo.fh) ;
     if (file)
@@ -64,12 +64,12 @@ extern void dpf_file_set(char *file)
     else gdo.fh = 0 ;
     }
 
-extern void dpf_level_set(int value)
+extern void dof_level_set(int value)
 {
     gdo.level = value ;
     }
 
-extern void dpf_mask_set(int value)
+extern void dof_mask_set(int value)
 {
     gdo.mask = value ;
     }

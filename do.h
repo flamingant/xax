@@ -15,18 +15,16 @@ typedef struct {
 
 extern GDO gdo ;
 
-extern void dph(char *p,int n) ;
+extern void doph(char *p,int n) ;
 
-extern void dpf(char *fmt,...) ;
-extern void dpfn(int level,char *fmt,...) ;
-extern void dpfm(int mask,char *fmt,...) ;
+extern void dof(char *fmt,...) ;
+extern void dofn(int level,char *fmt,...) ;
+extern void dofm(int mask,char *fmt,...) ;
 
-extern void dpf_init(char *file,int level,int mask) ;
-extern void dpf_file_set(char *file) ;
-extern void dpf_level_set(int) ;
-extern void dpf_mask_set(int) ;
-
-extern int dp_arg_try(char *name,char *value) ;
+extern void dof_init(char *file,int level,int mask) ;
+extern void dof_file_set(char *file) ;
+extern void dof_level_set(int) ;
+extern void dof_mask_set(int) ;
 
 #endif
 
