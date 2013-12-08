@@ -2,6 +2,7 @@
 extern "C" {
 #endif
 
+#include	<unistd.h>
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<string.h>
@@ -410,6 +411,12 @@ extern int arg_expand(int *pargc,char ***pargv)
 	if (!arg) continue ;		/* previously killed */
 	if (*arg == '-') {
 	    switch (*(arg+1)) {
+	    case 'd':
+		if (chdir(arg+2) == -1) {
+		    errorfatal("failed to chdir to %s\n",arg+2) ;
+		    }
+		argv[i] = 0 ;
+		break ;
 	    case 'y': {
 		ARG	a[1] ;
 		arg_inject_read(arg+2,a,1) ;
