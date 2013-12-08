@@ -1,7 +1,0 @@
---no-init
---trace=all
---log-section-all=yes
---trace=UFM_CREATE
---trace=UFM_DESTROY
---hexec=/what?cmd=login
---hexec=/timer

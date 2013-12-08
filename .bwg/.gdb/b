@@ -1,8 +1,0 @@
-set args -ma --hexec=/what?cmd=login --hexec=/timer
-
-define sto
-p stimer_block()
-end
-
-#set args -mssh_sh localhost nick lllmmm -k
-#b pollit
