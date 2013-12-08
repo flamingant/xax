@@ -74,25 +74,18 @@ libnpu.a:	$(LIBNPU_OBJ)
 lgen.mk:	lgen.pl ../lgen.pm ./lgen.pm ../npulgen.pm
 		perl -I.. lgen.pl make $@ ;
 
-gen.c:		$(AOBJSGEN) lgen.mk
-		perl -I.. lgen.pl init $@
-
-ALLOBJSDEP =	$(AOBJSDEP)
-
 clean:
-		rm -f $(ALLOBJSDEP) $(AEXE) $(LIBNPU_OBJ) $(ALIBSDEP)
+		rm -f $(LIBNPU_OBJ) libnpu.a
 
-xclean:
-		rm -f $(ALLOBJSDEP) $(AEXE) gen.o
+xclean:		clean
+		rm -f *.o
 
 squeaky:	xclean
 		rm -f ../.gen/*.c ../.gen/*.h ../.gen/*.g
-		rm -f lgen.mk locate.mk .gdb.el .gdb/a gen.c
+		rm -f lgen.mk locate.mk
 
 locate.mk:	locate.g.mk
 		perl locate.g.mk >locate.mk
 
 locate:		
 		perl locate.g.mk >locate.mk
-		perl .gdb.g.el >.gdb.el
-		cd .gdb ; perl a.g >a
