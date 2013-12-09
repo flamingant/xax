@@ -4,7 +4,16 @@ use Exporter ;
 @ISA = ('Exporter') ;
 @EXPORT = qw(trim sprin quickdump cfparse dump_items) ;
 @EXPORT = (@EXPORT,qw(hyphenate unhyphenate)) ;
+@EXPORT = (@EXPORT,qw(hslice)) ;
 
+################################################################
+sub hslice ($@) {
+    my $h = shift ;
+    my @z = map {$_ => $h->{$_}} @_ ;
+    @z ;
+}
+
+################################################################
 sub trim {
     $_[0] =~ s!^\s+!! ;
     $_[0] =~ s!\s+$!! ;
