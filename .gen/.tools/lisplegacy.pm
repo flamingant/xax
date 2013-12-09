@@ -180,13 +180,24 @@ sub one_F {
 #    print "$props\n" ;
 #    print join("|",keys %$rp),"\n" ;
 
-    $f->{lname} = $f->{name} ;
+    $f->{lname} = unadorn sym_c_to_lisp $f->{name} ;
     if (defined($rp->{"name"})) {
 	$f->{lname} = unquote $rp->{"name"}
     }
     if (defined($rp->{"l"})) {
 	$f->{lisp} = 1 ;
     }
+    if (defined($rp->{"argc"})) {
+	my @a = split(/\s+/,$rp->{"argc"}) ;
+	$f->{argcmin} = $a[0] ;
+	$f->{argcmax} = $a[1] ;
+    }
+    else {
+	$f->{argcmin} = @{$f->{args}} ;
+	$f->{argcmax} = @{$f->{args}} ;
+    }
+
+    $f = {%$f,hslice($rp,qw(keys doc trap_exec side_effects allocates command))} ;
 
     push @{$items->{fun}},$f ;
 }
@@ -202,8 +213,12 @@ sub find_F {
     for $item (@{$items->{fun}}) {
 	if ($item->{lisp}) {
 	    my $c ;
-	    $c = "{$Q{lname},(lfun) $I{name}}" ;
-	    push @{$items->{lsub}},{c => $c} ;
+	    $c .= "$Q{lname},(lfun) $I{name},subret_$I{type}," ;
+	    $c .= "$I{argcmin},$I{argcmax}," ;
+	    $c .= "0," ;
+	    $c .= "{{$I{trap_exec},$I{side_effects},$I{allocates},$I{command}}}," ;
+	    $c .= "$I{keys},$Q{doc}" ;
+	    push @{$items->{lsub}},{c => "{$c}"} ;
 	}
 	if ($f->{class} eq 'extern') {
 	    push @{$items->{hout}},"$f->{dec} ;\n" ;
