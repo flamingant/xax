@@ -145,6 +145,12 @@ sub find_T {
 	   }
 }
 
+sub unquote {
+    my $s = shift ;
+    if ($s =~ s!^\"!!) {$s =~ s!\"$!!;}
+    $s ;
+}
+
 ################################################################
 sub one_F {
     my $f = shift ;
@@ -153,8 +159,9 @@ sub one_F {
 #    print "$props\n" ;
 #    print join("|",keys %$rp),"\n" ;
 
+    $f->{lname} = $f->{name} ;
     if (defined($rp->{"name"})) {
-	print "prop name = $rp->{name}\n" ;
+	$f->{lname} = unquote $rp->{"name"}
     }
     if (defined($rp->{"l"})) {
 #	print "lisp" ;
