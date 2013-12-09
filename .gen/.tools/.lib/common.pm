@@ -5,7 +5,32 @@ use Exporter ;
 @EXPORT = qw(trim sprin quickdump cfparse dump_items) ;
 @EXPORT = (@EXPORT,qw(hyphenate unhyphenate)) ;
 @EXPORT = (@EXPORT,qw(hslice)) ;
+@EXPORT = (@EXPORT,qw(lparse lprops)) ;
 
+################################################################
+sub lparse {
+    my $s = shift ;
+    my $r = [extract_multiple($s,
+			      [sub {extract_bracketed($_[0],'()')}],
+			      undef,
+			      1
+	     )] ;
+    $r ;
+}
+
+sub lprops {
+    my $s = shift ;
+    my $p ;
+    my $r = lparse $s ;
+    for (@$r) {
+	s!^.!!s ;
+	s!.$!!s ;
+	my ($k,$v) = split(/\s+/,$_,2) ;
+	$p->{$k} = $v || "" ;
+    }
+    $p ;
+}
+    
 ################################################################
 sub hslice ($@) {
     my $h = shift ;
