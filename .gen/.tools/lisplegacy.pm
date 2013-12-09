@@ -85,8 +85,19 @@ sub one_T {
     $pat = join("|",map $_->[0],@$tomem) ;
     $pat = "\\b${t}__($pat)\\b" ;
     while (m!$pat!g) {
-	print "$1\n" ;
+	$m->{$1} = 1 ;
     }
+    for (@$tomem) {
+	if ($m->{$_->[0]}) {
+	    push @$f,"${t}__$_->[0]" ;
+	}
+	else  {
+	    push @$f,"tog__$_->[0]" ;
+	}
+    }
+    print "LTD ${t}_ltd[] = {{\n" ;
+    for (@$f) { print "    $_,\n" ;}
+    print "    }} ;\n\n" ;
 }
 
 sub find_T {
