@@ -81,6 +81,19 @@ sub one_T {
     my $t = shift ;
     my $props = shift ;
     my $m = {} ;
+    my $f ;
+
+    push @$f,"\"$t\",\'-\'" ;
+
+    for (qw(gcpro destroy nopointer link number integer symbol string)) {
+	if ($props =~ s!$_!!) {
+	    push @{$m->{flags}},"tf_$_" ;
+	}
+    }
+
+    push @$f,join " | ",@{$m->{flags}} ;
+
+    local $_ = $gtext ;
     my $pat ;
     $pat = join("|",map $_->[0],@$tomem) ;
     $pat = "\\b${t}__($pat)\\b" ;
@@ -108,6 +121,7 @@ sub find_T {
 	   }
 }
 
+################################################################
 sub start {
     if ($text !~ m!cg-start!) { return ;}
 #    print "$file is a lisp module\n" ;
