@@ -164,13 +164,10 @@ sub one_F {
 	$f->{lname} = unquote $rp->{"name"}
     }
     if (defined($rp->{"l"})) {
-#	print "lisp" ;
+	$f->{lisp} = 1 ;
     }
 
-    $f = {%$f,hslice($rp,qw(name lisp))} ;
-
-    print "name : $f->{name}" ;
-    print "\n" ;
+    push @{$items->{fun}},$f ;
 }
 
 sub find_F {
@@ -179,6 +176,11 @@ sub find_F {
     while (m!/\*\(F\s*(.*?)\)\*/!g) {
 	my $f = cfparse $' ;
 	one_F $f,$1 ;
+    }
+    for my $f (@{$items->{fun}}) {
+	if ($f->{class} eq 'extern') {
+#	    print "$f->{dec} ;\n" ;
+	}
     }
 }
 
