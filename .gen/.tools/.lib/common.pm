@@ -127,7 +127,9 @@ sub cfparse {
 	    last ;
 	}
 	$d =~ s!,!! ;
-	push @{$r->{args}},$a ;
+	if ($a->{type} ne 'void') {
+	    push @{$r->{args}},$a ;
+	}
     }
     $r ;
 }
