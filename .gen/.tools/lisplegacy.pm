@@ -179,6 +179,9 @@ sub one_F {
     my $rp = lprops $props ;
 
     $f->{lname} = unadorn sym_c_to_lisp $f->{name} ;
+
+    $rp->{doc} = unquote $rp->{doc} ;
+
     if (defined($rp->{"name"})) {
 	$f->{lname} = unquote $rp->{"name"}
     }
