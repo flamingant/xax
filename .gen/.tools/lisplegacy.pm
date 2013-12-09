@@ -41,9 +41,9 @@ use Interpolation
 
 ################################################################
 $tomem = [
-    ["fields",	"lo"],
-    ["gs_name",	"lo"],
-    ["gs_cvx",	"lo"],
+    ["fields",	"lo", "0"],
+    ["gs_name",	"lo", "gs__none"],
+    ["gs_cvx",	"lo", "gs__none"],
     ["gp",	"lo"],
     ["funcall",	"lo"],
     ["destroy",	"void"],
@@ -84,7 +84,7 @@ sub one_T {
     my $f ;
 
     $m->{tag} = '-' ;
-    if ($props =~ s!\(tag\s*(.)!!) {$m->{tag} = $1 ;}
+    if ($props =~ s!\(tag\s*\\*(.)!!) {$m->{tag} = $1 ;}
 
     push @$f,"\"$t\",\'$m->{tag}\'" ;
 
@@ -104,7 +104,7 @@ sub one_T {
 	    push @$f,"{0,nnc_nil, $a[1],sizeof(lo_$t),0,  0,0,0}" ;
 	}
 	elsif ($a[0] eq 'v') {
-	    push @$f,"{0,nnc_nil, $a[1],sizeof(lo_$t),0,  $a[2],$a[3],$a[4]}" ;
+	    push @$f,"{0,nnc_nil, $a[1],sizeof(lo_$t),0,  $a[4],$a[3],$a[2]}" ;
 	}
     }
     else {
@@ -122,8 +122,13 @@ sub one_T {
 	if ($m->{$_->[0]}) {
 	    push @$f,"${t}__$_->[0]" ;
 	}
-	else  {
-	    push @$f,"tog__$_->[0]" ;
+	else {
+	    if (@$_ > 2) {
+		push @$f,$_->[2] ;
+	    }
+	    else {
+		push @$f,"tog__$_->[0]" ;
+	    }
 	}
     }
     print "LTD ${t}_ltd[] = {{\n" ;
