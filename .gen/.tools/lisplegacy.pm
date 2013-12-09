@@ -94,6 +94,10 @@ sub one_T {
 	}
     }
 
+    push @{$m->{flags}},0 unless push @{$m->{flags}} ;
+
+    push @$f,join " | ",@{$m->{flags}} ;
+
     if ($props =~ m!\(alloc\s*(.*?)\)!) {
 	my @a = split(/\s+/,$1) ;
 	if ($a[0] eq 'f') {
@@ -106,8 +110,6 @@ sub one_T {
     else {
 	push @$f,"{0}" ;
     }
-
-    push @$f,join " | ",@{$m->{flags}} ;
 
     local $_ = $gtext ;
     my $pat ;
