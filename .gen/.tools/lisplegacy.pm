@@ -192,6 +192,7 @@ sub one_F {
 }
 
 sub find_F {
+    my $o ;
     local $_ = $gtext ;
     my $name ;
     while (m!/\*\(F\s*(.*?)\)\*/!g) {
