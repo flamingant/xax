@@ -32,6 +32,31 @@ use Data::Dumper ;
 
 my $info = {} ;
 
+sub unquote {
+    my $s = shift ;
+    if ($s =~ s!^\"!!) {$s =~ s!\"$!!;}
+    $s ;
+}
+
+sub csafe {
+    my $s = shift ;
+    $s =~ tr!-!_! ;
+    $s ;
+}
+
+sub sym_c_to_lisp {
+    my $s = shift ;
+    $s =~ tr!_!-! ;
+    $s ;
+}
+
+sub unadorn {
+    my $s = shift ;
+    $s =~ s!^[FQ]!! ;
+    $s =~ s![FQ]$!! ;
+    $s ;
+}
+
 ################################################################
 use Interpolation
     'I:@->$' => sub {my $s = $item->{$_[0]} || $_[1] || 0 ; $s},
@@ -143,12 +168,6 @@ sub find_T {
 	my $t = $1 ;
 	one_T $1,$2 ;
 	   }
-}
-
-sub unquote {
-    my $s = shift ;
-    if ($s =~ s!^\"!!) {$s =~ s!\"$!!;}
-    $s ;
 }
 
 ################################################################
