@@ -25,6 +25,7 @@ main::module $module->{name} ;
 *post = *main::post ;
 *text = *main::text ;
 
+use common ;
 use collect ;
 
 use Data::Dumper ;
@@ -145,6 +146,36 @@ sub find_T {
 }
 
 ################################################################
+sub one_F {
+    my $f = shift ;
+    my $props = shift ;
+    my $rp = lprops $props ;
+#    print "$props\n" ;
+#    print join("|",keys %$rp),"\n" ;
+
+    if (defined($rp->{"name"})) {
+	print "prop name = $rp->{name}\n" ;
+    }
+    if (defined($rp->{"l"})) {
+#	print "lisp" ;
+    }
+
+    $f = {%$f,hslice($rp,qw(name lisp))} ;
+
+    print "name : $f->{name}" ;
+    print "\n" ;
+}
+
+sub find_F {
+    local $_ = $gtext ;
+    my $name ;
+    while (m!/\*\(F\s*(.*?)\)\*/!g) {
+	my $f = cfparse $' ;
+	one_F $f,$1 ;
+    }
+}
+
+################################################################
 sub start {
     if ($text !~ m!cg-start!) { return ;}
 #    print "$file is a lisp module\n" ;
@@ -153,6 +184,7 @@ sub start {
     $text =~ m!/\*\(cg-end\).*!s ;
     $gtext = $` ;
     find_T ;
+    find_F ;
 }
 
 sub finish {
