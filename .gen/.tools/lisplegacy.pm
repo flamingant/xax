@@ -76,8 +76,7 @@ $tomem = [
 
 sub one_T {
     my $t = shift ;
-    local $_ = $text ;
-    s!/\*\(cg-end\).*!!s ;
+    local $_ = $gtext ;
     my $m = {} ;
     my $pat ;
     $pat = join("|",map $_->[0],@$tomem) ;
@@ -88,7 +87,7 @@ sub one_T {
 }
 
 sub find_T {
-    local $_ = $text ;
+    local $_ = $gtext ;
     while (m!/\*\(T\s*(\w+)!g) {
 	my $t = $1 ;
 	one_T $t ;
@@ -100,6 +99,8 @@ sub start {
 #    print "$file is a lisp module\n" ;
     $info->{islisp} = 1 ;
     collect::register('lispmod',"morsel_$stem") ;
+    $text =~ m!/\*\(cg-end\).*!s ;
+    $gtext = $` ;
     find_T ;
 }
 
