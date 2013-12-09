@@ -210,7 +210,7 @@ sub find_F {
     my $o ;
     local $_ = $gtext ;
     my $name ;
-    while (m!/\*\(F\s*(.*?)\)\s*\*/!g) {
+    while (m!/\*\(F\s*(.*?)\)\s*\*/!gs) {
 	my $f = cfparse $' ;
 	one_F $f,$1 ;
     }
