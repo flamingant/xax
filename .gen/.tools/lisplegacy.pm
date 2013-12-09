@@ -83,7 +83,10 @@ sub one_T {
     my $m = {} ;
     my $f ;
 
-    push @$f,"\"$t\",\'-\'" ;
+    $m->{tag} = '-' ;
+    if ($props =~ s!\(tag\s*(.)!!) {$m->{tag} = $1 ;}
+
+    push @$f,"\"$t\",\'$m->{tag}\'" ;
 
     for (qw(gcpro destroy nopointer link number integer symbol string)) {
 	if ($props =~ s!$_!!) {
