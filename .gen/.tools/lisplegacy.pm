@@ -40,11 +40,19 @@ use Interpolation
  ;
 
 ################################################################
+sub find_T {
+    local $_ = $text ;
+    while (m!/\*\(T\s*(\w+)!g) {
+	print "T $1\n" ;
+	   }
+}
+
 sub start {
     if ($text !~ m!cg-start!) { return ;}
 #    print "$file is a lisp module\n" ;
     $info->{islisp} = 1 ;
     collect::register('lispmod',"morsel_$stem") ;
+    find_T ;
 }
 
 sub finish {
