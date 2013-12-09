@@ -177,8 +177,6 @@ sub one_F {
     my $f = shift ;
     my $props = shift ;
     my $rp = lprops $props ;
-#    print "$props\n" ;
-#    print join("|",keys %$rp),"\n" ;
 
     $f->{lname} = unadorn sym_c_to_lisp $f->{name} ;
     if (defined($rp->{"name"})) {

@@ -23,18 +23,17 @@ sub one {
     $c = file_contents $f ;
     $c =~ m!\(cg-end\)\*/! ;
     $c = $' ;
-    $c =~ m!^static!m ;
+    $c =~ m!^(static struct sym_init|static int mod_mimf)!m ;
     $c = $` ;
     chdir $cwd ;
     open O,">$cwd/$f.b" ;
     binmode O ;
     print O $c ;
     close O ;
-    system "diff $f.a $f.b" ;
+    system "diff --ignore-blank-lines $f.a $f.b" ;
 }
 
 sub _1209_1250 {
-#    one "lt_rect.c" ;
     chdir "../../.." ;
     @f = glob("*.c") ;
     chdir $cwd ;
@@ -42,6 +41,10 @@ sub _1209_1250 {
 	print "$_:\n" ;
 	one $_ ;
     }
+}
+sub _1209_1605 {
+#    one "lt_rect.c" ;
+    one "alloc.c" ;
 }
 
 sub main {
