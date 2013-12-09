@@ -157,9 +157,11 @@ sub one_T {
 	    }
 	}
     }
-    print "LTD ${t}_ltd[] = {{\n" ;
-    for (@$f) { print "    $_,\n" ;}
-    print "    }} ;\n\n" ;
+    my $o ;
+    push @$o,"LTD ${t}_ltd[] = {{\n" ;
+    for (@$f) { push @$o,"    $_,\n" ;}
+    push @$o,"    }} ;\n\n" ;
+    push @{$items->{cout}},@$o ;
 }
 
 sub find_T {
@@ -203,12 +205,15 @@ sub find_F {
 	    push @{$items->{lsub}},{c => $c} ;
 	}
 	if ($f->{class} eq 'extern') {
-#	    print "$f->{dec} ;\n" ;
+	    push @{$items->{hout}},"$f->{dec} ;\n" ;
 	}
     }
+    push @$o,"static lo_sub sub_mod[] = {\n" ;
     for $item (@{$items->{lsub}}) {
-	print "    $I{c},\n" ;
+	push @$o,"    $I{c},\n" ;
     }
+    push @$o,"    {0}} ;\n\n\n" ;
+    push @{$items->{cout}},@$o ;
 }
 
 ################################################################
@@ -221,6 +226,10 @@ sub start {
     $gtext = $` ;
     find_T ;
     find_F ;
+    print "\n\n\n" ;
+    for (@{$items->{cout}}) {
+	print ;
+    }
 }
 
 sub finish {
