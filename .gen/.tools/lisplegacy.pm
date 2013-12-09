@@ -77,6 +77,7 @@ $tomem = [
 sub one_T {
     my $t = shift ;
     local $_ = $text ;
+    s!/\*\(cg-end\).*!!s ;
     my $m = {} ;
     my $pat ;
     $pat = join("|",map $_->[0],@$tomem) ;
