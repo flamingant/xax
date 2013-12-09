@@ -22,16 +22,26 @@ sub one {
     system "perl ugen.pl gen $f >$cwd/$f.a" ;
     $c = file_contents $f ;
     $c =~ m!\(cg-end\)\*/! ;
+    $c = $' ;
+    $c =~ m!^static!m ;
+    $c = $` ;
     chdir $cwd ;
     open O,">$cwd/$f.b" ;
     binmode O ;
-    print O $' ;
+    print O $c ;
     close O ;
     system "diff $f.a $f.b" ;
 }
 
 sub _1209_1250 {
-    one "lt_rect.c" ;
+#    one "lt_rect.c" ;
+    chdir "../../.." ;
+    @f = glob("*.c") ;
+    chdir $cwd ;
+    for (@f) {
+	print "$_:\n" ;
+	one $_ ;
+    }
 }
 
 sub main {
