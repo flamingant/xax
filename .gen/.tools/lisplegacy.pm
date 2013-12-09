@@ -177,10 +177,18 @@ sub find_F {
 	my $f = cfparse $' ;
 	one_F $f,$1 ;
     }
-    for my $f (@{$items->{fun}}) {
+    for $item (@{$items->{fun}}) {
+	if ($item->{lisp}) {
+	    my $c ;
+	    $c = "{$Q{lname},(lfun) $I{name}}" ;
+	    push @{$items->{lsub}},{c => $c} ;
+	}
 	if ($f->{class} eq 'extern') {
 #	    print "$f->{dec} ;\n" ;
 	}
+    }
+    for $item (@{$items->{lsub}}) {
+	print "    $I{c},\n" ;
     }
 }
 
