@@ -221,7 +221,8 @@ sub find_F {
 	    $c .= "$I{argcmin},$I{argcmax}," ;
 	    $c .= "0," ;
 	    $c .= "{{$I{trap_exec},$I{side_effects},$I{lispA},$I{command}}}," ;
-	    $c .= "$I{keys},$Q{doc}" ;
+	    $c .= $item->{lispk} ? "K$I{name}," : "0," ;
+	    $c .= "$Q{doc}" ;
 	    push @{$items->{lsub}},{c => "{$c}"} ;
 	}
 	if ($f->{class} eq 'extern') {
