@@ -40,10 +40,57 @@ use Interpolation
  ;
 
 ################################################################
+$tomem = [
+    ["gp",	"lo"],
+    ["funcall",	"lo"],
+    ["destroy",	"void"],
+    ["claim",	"void"],
+    ["lread",	"lo"],
+    ["eval",	"lo"],
+    ["print",	"void"],
+    ["format",	"lo"],
+    ["copy",	"lo"],
+    ["eq",	"lo"],
+    ["equal",	"lo"],
+    ["length",	"lo_int"],
+    ["pplist",	"lo*"],
+    ["aref",	"lo"],
+    ["aset",	"lo"],
+    ["sf_get",	"int"],
+    ["sf_set",	"lo"],
+    ["symget",	"lo"],
+    ["symset",	"lo"],
+    ["init",	"void"],
+    ["ox_int",	"void"],
+    ["ox_str",	"void"],
+    ["cmp",	"int"],
+    ["pprel",	"void"],
+    ["mread",	"lo"],
+    ["mwrite",	"lo"],
+    ["mdelete",	"lo"],
+    ["create",	"lo"],
+    ["next",	"lo"],
+    ["prev",	"lo"],
+    ["this",	"lo"],
+    ] ;
+
+sub one_T {
+    my $t = shift ;
+    local $_ = $text ;
+    my $m = {} ;
+    my $pat ;
+    $pat = join("|",map $_->[0],@$tomem) ;
+    $pat = "\\b${t}__($pat)\\b" ;
+    while (m!$pat!g) {
+	print "$1\n" ;
+    }
+}
+
 sub find_T {
     local $_ = $text ;
     while (m!/\*\(T\s*(\w+)!g) {
-	print "T $1\n" ;
+	my $t = $1 ;
+	one_T $t ;
 	   }
 }
 
