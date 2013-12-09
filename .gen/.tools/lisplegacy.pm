@@ -94,6 +94,19 @@ sub one_T {
 	}
     }
 
+    if ($props =~ m!\(alloc\s*(.*?)\)!) {
+	my @a = split(/\s+/,$1) ;
+	if ($a[0] eq 'f') {
+	    push @$f,"{0,nnc_nil, $a[1],sizeof(lo_$t),0,  0,0,0}" ;
+	}
+	elsif ($a[0] eq 'v') {
+	    push @$f,"{0,nnc_nil, $a[1],sizeof(lo_$t),0,  $a[2],$a[3],$a[4]}" ;
+	}
+    }
+    else {
+	push @$f,"{0}" ;
+    }
+
     push @$f,join " | ",@{$m->{flags}} ;
 
     local $_ = $gtext ;
