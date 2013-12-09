@@ -228,11 +228,13 @@ sub find_F {
 	    push @{$items->{hout}},"$f->{dec} ;\n" ;
 	}
     }
-    push @$o,"static lo_sub sub_mod[] = {\n" ;
-    for $item (@{$items->{lsub}}) {
-	push @$o,"    $I{c},\n" ;
+    if (@{$items->{lsub}}) {
+	push @$o,"static lo_sub sub_mod[] = {\n" ;
+	for $item (@{$items->{lsub}}) {
+	    push @$o,"    $I{c},\n" ;
+	}
+	push @$o,"    {0}} ;\n\n\n" ;
     }
-    push @$o,"    {0}} ;\n\n\n" ;
     push @{$items->{cout}},@$o ;
 }
 
