@@ -76,7 +76,7 @@ $tomem = [
 
 sub one_T {
     my $t = shift ;
-    local $_ = $gtext ;
+    my $props = shift ;
     my $m = {} ;
     my $pat ;
     $pat = join("|",map $_->[0],@$tomem) ;
@@ -88,9 +88,9 @@ sub one_T {
 
 sub find_T {
     local $_ = $gtext ;
-    while (m!/\*\(T\s*(\w+)!g) {
+    while (m!/\*\(T\s*(\w+)(.*?)\)\*/!g) {
 	my $t = $1 ;
-	one_T $t ;
+	one_T $1,$2 ;
 	   }
 }
 
