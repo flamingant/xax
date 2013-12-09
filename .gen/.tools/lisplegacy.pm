@@ -187,6 +187,9 @@ sub one_F {
     }
     if (defined($rp->{"l"})) {
 	$f->{lisp} = 1 ;
+	for (split(/\s+/,$rp->{"l"})) {
+	    $f->{"lisp$_"} = 1 ;
+	}
     }
     if (defined($rp->{"argc"})) {
 	my @a = split(/\s+/,$rp->{"argc"}) ;
@@ -217,7 +220,7 @@ sub find_F {
 	    $c .= "$Q{lname},(lfun) $I{name},subret_$I{type}," ;
 	    $c .= "$I{argcmin},$I{argcmax}," ;
 	    $c .= "0," ;
-	    $c .= "{{$I{trap_exec},$I{side_effects},$I{allocates},$I{command}}}," ;
+	    $c .= "{{$I{trap_exec},$I{side_effects},$I{lispA},$I{command}}}," ;
 	    $c .= "$I{keys},$Q{doc}" ;
 	    push @{$items->{lsub}},{c => "{$c}"} ;
 	}
