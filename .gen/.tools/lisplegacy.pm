@@ -41,6 +41,9 @@ use Interpolation
 
 ################################################################
 $tomem = [
+    ["fields",	"lo"],
+    ["gs_name",	"lo"],
+    ["gs_cvx",	"lo"],
     ["gp",	"lo"],
     ["funcall",	"lo"],
     ["destroy",	"void"],
