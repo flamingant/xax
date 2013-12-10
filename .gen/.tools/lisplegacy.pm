@@ -283,6 +283,28 @@ sub out_Q {
 }
 
 ################################################################
+sub one_V {
+    my ($name,$props) = @_ ;
+    my $rp = lprops $props ;
+    my $i = {
+	name => "Q$name",
+	lname => unadorn sym_c_to_lisp $name,
+	undeclared => 1} ;
+    push @{$items->{sym}},$i ;
+}
+
+sub find_V {
+    my $os ;
+    my $o ;
+    local $_ = $gtext ;
+    my $name ;
+    while (m!lo\s+(\w+).*?/\*\(V\s*(.*?)\)\s*\*/!g) {
+#	print " ==== $& ====\n" ;
+	one_V $1,$2 ;
+    }
+}
+
+################################################################
 sub start {
     if ($text !~ m!cg-start!) { return ;}
 #    print "$file is a lisp module\n" ;
@@ -293,9 +315,10 @@ sub start {
     find_T ;
     find_F ;
     find_Q ;
+    find_V ;
 
     out_Q ;
-    print "\n\n" ;
+    print "\n\n\n" ;
     for (@{$items->{cout}}) {
 	print ;
     }
