@@ -240,6 +240,49 @@ sub find_F {
 }
 
 ################################################################
+sub one_Q {
+    my ($name,$props) = @_ ;
+    my $rp = lprops $props ;
+    my $i = {
+	name => $name,
+	lname => unadorn sym_c_to_lisp $name,
+    } ;
+    if (defined($rp->{name})) {
+	$i->{lname} = unquote $rp->{name} ;
+    }
+    push @{$items->{sym}},$i ;
+}
+
+sub find_Q {
+    my $os ;
+    my $o ;
+    local $_ = $gtext ;
+    my $name ;
+    while (m!lo\s+(\w+).*?/\*\(Q\s*(.*?)\)\s*\*/!g) {
+	one_Q $1,$2 ;
+    }
+    $items->{sym} = [reverse @{$items->{sym}}] ;
+}
+
+sub out_Q {
+    my $os ;
+    my $o ;
+
+    if (@{$items->{sym}}) {
+	push @$o,"static struct sym_init sym_mod[] = {\n" ;
+	for $item (@{$items->{sym}}) {
+	    push @$o,"    {&$I{name},$Q{lname}},\n" ;
+	    if ($item->{undeclared}) {
+		push @$os,"lo $item->{name} ;\n" ;
+	    }
+	}
+	push @$o,"    {0}} ;\n" ;
+    }
+    push @{$items->{cout}},@$os,"\n" ;
+    push @{$items->{cout}},@$o,"\n\n" ;
+}
+
+################################################################
 sub start {
     if ($text !~ m!cg-start!) { return ;}
 #    print "$file is a lisp module\n" ;
@@ -249,7 +292,10 @@ sub start {
     $gtext = $` ;
     find_T ;
     find_F ;
-    print "\n\n\n" ;
+    find_Q ;
+
+    out_Q ;
+    print "\n\n" ;
     for (@{$items->{cout}}) {
 	print ;
     }
