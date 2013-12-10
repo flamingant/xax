@@ -44,13 +44,13 @@ sub csafe {
     $s ;
 }
 
-sub sym_c_to_lisp {
+sub sym_c_to_lisp ($) {
     my $s = shift ;
     $s =~ tr!_!-! ;
     $s ;
 }
 
-sub unadorn {
+sub unadorn ($) {
     my $s = shift ;
     $s =~ s!^[FQ]!! ;
     $s =~ s![FQ]$!! ;
