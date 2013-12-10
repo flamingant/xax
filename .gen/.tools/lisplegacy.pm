@@ -183,7 +183,7 @@ sub one_F {
     $rp->{doc} = unquote $rp->{doc} ;
 
     if (defined($rp->{"name"})) {
-	$f->{lname} = unquote $rp->{"name"}
+	$f->{lname} = unquote $rp->{"name"} ;
     }
     if (defined($rp->{"l"})) {
 	$f->{lisp} = 1 ;
@@ -240,7 +240,7 @@ sub find_F {
 	for $item (@{$items->{lsub}}) {
 	    push @$o,"    $I{c},\n" ;
 	}
-	push @$o,"    {0}} ;\n\n\n" ;
+	push @$o,"    {0}} ;\n\n" ;
     }
     push @{$items->{cout}},@$o ;
 }
@@ -313,7 +313,6 @@ sub find_V {
 ################################################################
 sub start {
     if ($text !~ m!cg-start!) { return ;}
-#    print "$file is a lisp module\n" ;
     $info->{islisp} = 1 ;
     collect::register('lispmod',"morsel_$stem") ;
     $text =~ m!/\*\(cg-end\).*!s ;
@@ -324,7 +323,7 @@ sub start {
     find_V ;
 
     out_Q ;
-    print "\n\n\n" ;
+    print "\n\n" ;
     for (@{$items->{cout}}) {
 	print ;
     }
