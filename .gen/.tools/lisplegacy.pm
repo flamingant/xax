@@ -228,6 +228,12 @@ sub find_F {
 	if ($f->{class} eq 'extern') {
 	    push @{$items->{hout}},"$f->{dec} ;\n" ;
 	}
+	if ($item->{lisps}) {
+	    push @{$items->{sym}},{
+		name => "Q$item->{name}",
+		lname => $item->{lname},
+		undeclared => 1} ;
+	}
     }
     if (@{$items->{lsub}}) {
 	push @$o,"static lo_sub sub_mod[] = {\n" ;
