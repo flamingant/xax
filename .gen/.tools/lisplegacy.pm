@@ -52,8 +52,8 @@ sub sym_c_to_lisp ($) {
 
 sub unadorn ($) {
     my $s = shift ;
-    $s =~ s!^[FQ]!! ;
-    $s =~ s![FQ]$!! ;
+    $s =~ s!^[FQVKS]*!! ;
+    $s =~ s![FQVKS]*$!! ;
     $s ;
 }
 
