@@ -268,7 +268,7 @@ sub find_x {
     my $o ;
     local $_ = $gtext ;
     my $name ;
-    while (m!lo\s+(\w+).*?/\*\($k\s*(.*?)\)\s*\*/!go) {
+    while (m!lo\s+(\w+).*?/\*\($k\s*(.*?)\)\s*\*/!g) {
 	one_x $iname,$1,$2 ;
     }
     $items->{$iname} = [reverse @{$items->{$iname}}] ;
@@ -295,30 +295,10 @@ sub out_x {
 }
 
 ################################################################
-sub one_Q {
-    my ($name,$props) = @_ ;
-    my $rp = lprops $props ;
-    my $i = {
-	name => $name,
-	lname => unadorn sym_c_to_lisp $name,
-    } ;
-    if (defined($rp->{name})) {
-	$i->{lname} = unquote $rp->{name} ;
-    }
-    push @{$items->{sym}},$i ;
-}
-
 sub find_Q {
-    my $os ;
-    my $o ;
-    local $_ = $gtext ;
-    my $name ;
-    while (m!lo\s+(\w+).*?/\*\(Q\s*(.*?)\)\s*\*/!g) {
-	one_Q $1,$2 ;
-    }
-    $items->{sym} = [reverse @{$items->{sym}}] ;
+    find_x "Q","sym" ;
 }
-
+    
 sub out_Q {
     out_x $items->{sym},"sym" ;
 }
