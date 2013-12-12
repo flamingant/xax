@@ -313,6 +313,15 @@ sub out_K {
 }
 
 ################################################################
+sub find_S {
+    find_x "S","usym" ;
+}
+
+sub out_S {
+    out_x $items->{usym},"tsym" ;
+}
+
+################################################################
 sub one_V {
     my ($name,$props) = @_ ;
     my $rp = lprops $props ;
@@ -346,10 +355,13 @@ sub start {
     find_Q ;
     find_V ;
     find_K ;
+    find_S ;
 
     out_F ;
     out_Q ;
     out_K ;
+    out_S ;
+
     print "\n\n" ;
     for (@{$items->{cout}}) {
 	print ;
