@@ -207,7 +207,6 @@ sub one_F {
 }
 
 sub find_F {
-    my $o ;
     local $_ = $gtext ;
     my $name ;
     while (m!/\*\(F\s*(.*?)\)\s*\*/!gs) {
@@ -235,6 +234,10 @@ sub find_F {
 		undeclared => 1} ;
 	}
     }
+}
+
+sub out_F {
+    my $o ;
     if (@{$items->{lsub}}) {
 	push @$o,"static lo_sub sub_mod[] = {\n" ;
 	for $item (@{$items->{lsub}}) {
@@ -243,6 +246,52 @@ sub find_F {
 	push @$o,"    {0}} ;\n\n" ;
     }
     push @{$items->{cout}},@$o ;
+}
+
+################################################################
+sub one_x {
+    my ($iname,$name,$props) = @_ ;
+    my $rp = lprops $props ;
+    my $i = {
+	name => $name,
+	lname => unadorn sym_c_to_lisp $name,
+    } ;
+    if (defined($rp->{name})) {
+	$i->{lname} = unquote $rp->{name} ;
+    }
+    push @{$items->{$iname}},$i ;
+}
+
+sub find_x {
+    my ($k,$iname) = @_ ;
+    my $os ;
+    my $o ;
+    local $_ = $gtext ;
+    my $name ;
+    while (m!lo\s+(\w+).*?/\*\($k\s*(.*?)\)\s*\*/!go) {
+	one_x $iname,$1,$2 ;
+    }
+    $items->{$iname} = [reverse @{$items->{$iname}}] ;
+}
+
+sub out_x {
+    my $it = shift ;
+    my $name = shift ;
+    my $os ;
+    my $o ;
+
+    if (@$it) {
+	push @$o,"static struct sym_init ${name}_mod[] = {\n" ;
+	for $item (@$it) {
+	    push @$o,"    {&$I{name},$Q{lname}},\n" ;
+	    if ($item->{undeclared}) {
+		push @$os,"lo $item->{name} ;\n" ;
+	    }
+	}
+	push @$o,"    {0}} ;\n" ;
+    }
+    push @{$items->{cout}},@$os,"\n" ;
+    push @{$items->{cout}},@$o,"\n\n" ;
 }
 
 ################################################################
@@ -271,21 +320,16 @@ sub find_Q {
 }
 
 sub out_Q {
-    my $os ;
-    my $o ;
+    out_x $items->{sym},"sym" ;
+}
 
-    if (@{$items->{sym}}) {
-	push @$o,"static struct sym_init sym_mod[] = {\n" ;
-	for $item (@{$items->{sym}}) {
-	    push @$o,"    {&$I{name},$Q{lname}},\n" ;
-	    if ($item->{undeclared}) {
-		push @$os,"lo $item->{name} ;\n" ;
-	    }
-	}
-	push @$o,"    {0}} ;\n" ;
-    }
-    push @{$items->{cout}},@$os,"\n" ;
-    push @{$items->{cout}},@$o,"\n\n" ;
+################################################################
+sub find_K {
+    find_x "K","keyword" ;
+}
+
+sub out_K {
+    out_x $items->{keyword},"key" ;
 }
 
 ################################################################
@@ -321,8 +365,11 @@ sub start {
     find_F ;
     find_Q ;
     find_V ;
+    find_K ;
 
+    out_F ;
     out_Q ;
+    out_K ;
     print "\n\n" ;
     for (@{$items->{cout}}) {
 	print ;
