@@ -348,11 +348,17 @@ sub out_S {
 sub one_V {
     my ($name,$props) = @_ ;
     my $rp = lprops $props ;
+    if ($rp->{init}) {$rp->{init} = eval $rp->{init};}
     my $i = {
+	vname => $name,
 	name => "Q$name",
 	lname => unadorn sym_c_to_lisp $name,
-	undeclared => 1} ;
+	undeclared => 1,
+	init => "Qnil",
+	%$rp,
+    } ;
     push @{$items->{sym}},$i ;
+    push @{$items->{var}},$i ;
 }
 
 sub find_V {
