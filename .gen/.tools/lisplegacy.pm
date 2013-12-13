@@ -30,7 +30,7 @@ use collect ;
 
 use Data::Dumper ;
 
-my $info = {} ;
+$info = {} ;
 
 ################################################################
 use Interpolation
