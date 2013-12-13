@@ -32,6 +32,36 @@ use Data::Dumper ;
 
 my $info = {} ;
 
+################################################################
+use Interpolation
+    'E' => 'eval',
+    'I:@->$' => sub {my $s = $item->{$_[0]} || $_[1] || 0 ; $s},
+    'A:@->$' => sub {my $s = $item->{$_[0]} ; "$s\[]" . ' ' x (($_[1] || 20) - length($s))},
+    'Q:@->$' => sub {my $s = $item->{$_[0]} ; "\"$s\""},
+    'QP:@->$' => sub {my $s = $item->{$_[0]} ; "\"$s\"" . ' ' x (($_[1] || 20) - length($s))},
+ ;
+
+sub iexpand {
+    local $_ = shift ;
+    my $v = {@_} ;
+    my $item = $v->{item} ;
+    my $o ;
+    while (!$done) {
+	$done = 1 ;
+	$o = '' ;
+	while (m/!!(.*?)!!/) {
+	    my $e = eval("\"$1\"") ;
+	    $done = 0 ;
+	    $o .= $` . $e ;
+	    $_ = $' ;
+	}
+	$o .= $_ ;
+	$_ = $o ;
+    }
+    $o ;
+}
+
+################################################################
 sub unquote {
     my $s = shift ;
     if ($s =~ s!^\"!!) {$s =~ s!\"$!!;}
@@ -56,14 +86,6 @@ sub unadorn ($) {
     $s =~ s![FQVKS]*$!! ;
     $s ;
 }
-
-################################################################
-use Interpolation
-    'I:@->$' => sub {my $s = $item->{$_[0]} || $_[1] || 0 ; $s},
-    'A:@->$' => sub {my $s = $item->{$_[0]} ; "$s\[]" . ' ' x (($_[1] || 20) - length($s))},
-    'Q:@->$' => sub {my $s = $item->{$_[0]} ; "\"$s\""},
-    'QP:@->$' => sub {my $s = $item->{$_[0]} ; "\"$s\"" . ' ' x (($_[1] || 20) - length($s))},
- ;
 
 ################################################################
 $tomem = [
@@ -162,6 +184,7 @@ sub one_T {
     for (@$f) { push @$o,"    $_,\n" ;}
     push @$o,"    }} ;\n\n" ;
     push @{$items->{cout}},@$o ;
+    push @{$items->{ltd}},$t ;
 }
 
 sub find_T {
@@ -344,6 +367,49 @@ sub find_V {
 }
 
 ################################################################
+sub out_mimf {
+    my $o ;
+    my $item ;
+    my $t = <<'_' ;
+static int mod_mimf(int level)
+{
+    int r = 0 ;
+    switch(level) {
+    case MOD_TOINIT:
+        !!$E{join("",@{$items->{ltd}})}!!
+        !!$E{join("",map {"\tltd_static_register(${_}_ltd) ;\n"} @{$items->{ltd}})}!!
+	break ;
+    case MOD_SUBINIT:
+	defsubs(sub_mod) ;
+	break ;
+    case MOD_SYMINIT:
+	defsyms(sym_mod) ;
+	break ;
+    case MOD_VARINIT:
+	defvar_lo(Qusymtab,&usymtab,usymtab) ;
+	break ;
+    }
+    return(r) ;
+    }
+
+struct mod mod_lt_usym[] = {{"lt_usym",mod_mimf,sym_mod,sub_mod}} ;
+
+static int morsel_fun(int i,void *a)
+{
+    switch(i) {
+    case MOM_LISPSTART: lisp_mod_add(mod_lt_usym) ; break ;
+}
+    return(0) ;
+}
+
+_
+## ~~~~~~~~~~~~~~~~
+    push @$o,iexpand $t ;
+    push @{$items->{cout}},@$o,"\n\n" ;
+}
+
+
+################################################################
 sub start {
     if ($text !~ m!cg-start!) { return ;}
     $info->{islisp} = 1 ;
@@ -361,6 +427,8 @@ sub start {
     out_Q ;
     out_K ;
     out_S ;
+
+    out_mimf ;
 
     print "\n\n" ;
     for (@{$items->{cout}}) {
