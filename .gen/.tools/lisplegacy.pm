@@ -437,6 +437,8 @@ static int morsel_fun(int i,void *a)
     return(0) ;
 }
 
+MORSEL morsel_!!$stem!![] = {morsel_fun} ;
+
 _
 ## ~~~~~~~~~~~~~~~~
     push @$o,iexpand $t ;
