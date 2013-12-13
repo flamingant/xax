@@ -446,3 +446,10 @@
   (setq cg-types list)
   nil)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun cg-end ()
+  (repr (rtor "\n" "^/\\*\\|\\'")
+	(format "#include	\".gen/%s.h\"\n#include	\".gen/%s.c\"\n" cg-file cg-file))
+;  (save-buffer)
+  )
+
