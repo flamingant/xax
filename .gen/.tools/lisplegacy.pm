@@ -393,6 +393,7 @@ sub mod_syminit {
     my $t = '    case MOD_SYMINIT:
 !!if (@{$items->{sym}}) {"\tdefsyms(sym_mod) ;\n"} else {""}!!
 !!if (@{$items->{keyword}}) {"\tdefkeys(key_mod) ;\n"} else {""}!!
+!!if (@{$items->{usym}}) {"\tdeftsyms(tsym_mod) ;\n"} else {""}!!
 	break ;
 ' ;
     $t ;
