@@ -52,6 +52,7 @@ sub iexpand {
 	while (m/!!(.*?)!!(\n|)/m) {
 	    my $e = eval($1) ;
 	    $done = 0 ;
+#	    $o .= $` . "## $1 ## == $e ==" ;
 	    $o .= $` . $e ;
 	    $_ = $' ;
 	}
@@ -505,3 +506,6 @@ sub gen_c {
 1 ;
 
 __END__
+
+(setq alt-buffer-eval-function '(lambda () (compile "perl -xlisplegacy lisplegacy/test.pl --cmd=_1209_1605")))
+(setq alt-buffer-eval-function '(lambda () (compile "perl -xlisplegacy lisplegacy/test.pl --cmd=_1213_1149")))
