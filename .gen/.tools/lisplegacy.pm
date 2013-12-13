@@ -49,7 +49,7 @@ sub iexpand {
     while (!$done) {
 	$done = 1 ;
 	$o = '' ;
-	while (m/!!(.*?)!!\n*/m) {
+	while (m/!!(.*?)!!(\n|)/m) {
 	    my $e = eval($1) ;
 	    $done = 0 ;
 	    $o .= $` . $e ;
