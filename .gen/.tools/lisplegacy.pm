@@ -50,7 +50,7 @@ sub iexpand {
 	$done = 1 ;
 	$o = '' ;
 	while (m/!!(.*?)!!/) {
-	    my $e = eval("\"$1\"") ;
+	    my $e = eval($1) ;
 	    $done = 0 ;
 	    $o .= $` . $e ;
 	    $_ = $' ;
