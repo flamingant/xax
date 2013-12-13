@@ -372,7 +372,44 @@ sub find_V {
     }
 }
 
-################################################################
+################################################################ 
+sub mod_toinit {
+    @{$items->{ltd}} or return "" ;
+    my $t = '    case MOD_TOINIT:
+!!join "",map {"\tltd_static_register(${_}_ltd) ;\n"} @{$items->{ltd}}!!
+	break ;
+' ;
+}
+
+sub mod_subinit {
+    my $t = '    case MOD_SUBINIT:
+!!if (@{$items->{lsub}}) {"\tdefsubs(sub_mod) ;\n"}!!
+	break ;
+' ;
+    $t ;
+}
+
+sub mod_syminit {
+    my $t = '    case MOD_SYMINIT:
+!!if (@{$items->{sym}}) {"\tdefsyms(sym_mod) ;\n"} else {""}!!
+!!if (@{$items->{keyword}}) {"\tdefkeys(key_mod) ;\n"} else {""}!!
+	break ;
+' ;
+    $t ;
+}
+
+sub mod_varinit {
+    my $v ;
+    for $item (@{$items->{var}}) {
+	push @$v,"\tdefvar_lo($I{name},&$I{vname},$I{init}) ;\n" ;
+    }
+    join("",
+	 "    case MOD_VARINIT:\n",
+	 @$v,
+	 "\tbreak ;\n"
+	) ;
+}
+
 sub out_mimf {
     my $o ;
     local $item ;
@@ -381,19 +418,10 @@ static int mod_mimf(int level)
 {
     int r = 0 ;
     switch(level) {
-    case MOD_TOINIT:
-        !!$E{join("",@{$items->{ltd}})}!!
-        !!$E{join("",map {"\tltd_static_register(${_}_ltd) ;\n"} @{$items->{ltd}})}!!
-	break ;
-    case MOD_SUBINIT:
-	defsubs(sub_mod) ;
-	break ;
-    case MOD_SYMINIT:
-	defsyms(sym_mod) ;
-	break ;
-    case MOD_VARINIT:
-	defvar_lo(Qusymtab,&usymtab,usymtab) ;
-	break ;
+!!mod_toinit!!
+!!mod_subinit!!
+!!mod_syminit!!
+!!mod_varinit!!
     }
     return(r) ;
     }
