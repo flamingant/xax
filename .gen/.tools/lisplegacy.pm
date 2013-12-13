@@ -248,8 +248,8 @@ sub find_F {
 	    $c .= "$Q{doc}" ;
 	    push @{$items->{lsub}},{c => "{$c}"} ;
 	}
-	if ($f->{class} eq 'extern') {
-	    push @{$items->{hout}},"$f->{dec} ;\n" ;
+	if ($item->{class} eq 'extern') {
+	    push @{$items->{hout}},"$item->{dec} ;\n" ;
 	}
 	if ($item->{lisps}) {
 	    push @{$items->{sym}},{
