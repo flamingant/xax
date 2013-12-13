@@ -475,10 +475,6 @@ sub start {
 
     out_mimf ;
 
-    print "\n\n" ;
-    for (@{$items->{cout}}) {
-	print ;
-    }
 }
 
 sub finish {
@@ -489,6 +485,7 @@ sub gen_h {
     my $o ;
     return unless $info->{islisp} ;
     push @$o,"/* $module->{name} { */\n" ;
+    push @$o,@{$items->{hout}} ;
     push @$o,"\n/* $module->{name} } */\n\n" ;
     @$o ;
 }
@@ -497,6 +494,7 @@ sub gen_c {
     my $o ;
     return unless $info->{islisp} ;
     push @$o,"/* $module->{name} { */\n" ;
+    push @$o,@{$items->{cout}} ;
     push @$o,"/* $module->{name} } */\n" ;
     @$o ;
 }
