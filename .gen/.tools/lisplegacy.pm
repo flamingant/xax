@@ -375,7 +375,7 @@ sub find_V {
 ################################################################
 sub out_mimf {
     my $o ;
-    my $item ;
+    local $item ;
     my $t = <<'_' ;
 static int mod_mimf(int level)
 {
