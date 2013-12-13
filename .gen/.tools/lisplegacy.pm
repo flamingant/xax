@@ -413,7 +413,10 @@ sub mod_varinit {
 
 sub out_mimf {
     my $o ;
-    local $item ;
+    local $item = {
+	sym_mod => @{$items->{sym}} ? "sym_mod" : "0",
+	sub_mod => @{$items->{lsub}} ? "sub_mod" : "0",
+    } ;
     my $t = <<'_' ;
 static int mod_mimf(int level)
 {
@@ -427,12 +430,12 @@ static int mod_mimf(int level)
     return(r) ;
     }
 
-struct mod mod_lt_usym[] = {{"lt_usym",mod_mimf,sym_mod,sub_mod}} ;
+struct mod mod_!!$stem!![] = {{"!!$stem!!",mod_mimf,!!"$I{sym_mod}"!!,!!"$I{sub_mod}"!!}} ;
 
 static int morsel_fun(int i,void *a)
 {
     switch(i) {
-    case MOM_LISPSTART: lisp_mod_add(mod_lt_usym) ; break ;
+    case MOM_LISPSTART: lisp_mod_add(mod_!!$stem!!) ; break ;
 }
     return(0) ;
 }
