@@ -421,6 +421,7 @@ sub out_mimf {
 static int mod_mimf(int level)
 {
     int r = 0 ;
+!!$info->{hasmimf} ? "    r |= __mimf(level) ;\n" : ""!!
     switch(level) {
 !!mod_toinit!!
 !!mod_subinit!!
@@ -456,6 +457,9 @@ sub start {
     collect::register('lispmod',"morsel_$stem") ;
     $text =~ m!/\*\(cg-end\).*!s ;
     $gtext = $` ;
+
+    if ($gtext =~ m!\b__mimf!) {$info->{hasmimf} = 1 ;}
+
     find_T ;
     find_F ;
     find_Q ;
