@@ -88,13 +88,19 @@ use Text::Balanced(qw(extract_bracketed
 sub cfparse {
     my $s = shift ;
     my $r = {} ;
-    $s =~ s!(static|extern)(.*?)(?=\{)!!s ;
+    $s =~ s!(static|extern)(.*?)(?=[\{;])!!s ;
     $r->{dec} = "$1$2" ;
     $r->{dec} =~ s!/\*.*?\*/! !gs ;
     $r->{dec} =~ s!\s+! !gs ;
     $r->{dec} =~ s!\s*$!! ;
-    $s =~ s!.*?(?=\{)!!s ;
-    $r->{body} = extract_bracketed($s,'{}"','\s*') ;
+
+    $s =~ s!.*?(?=[\{;])!!s ;
+    if ($s =~ m!^;!) {
+	# extern or forward declaration - no body
+    }
+    else {
+	$r->{body} = extract_bracketed($s,'{}"','\s*') ;
+    }
 
     my $d = $r->{dec} ;
     $d =~ s!(\w+)\s*(?=\()! ! ;
