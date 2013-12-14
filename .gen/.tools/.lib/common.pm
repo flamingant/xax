@@ -4,7 +4,41 @@ use Exporter ;
 @ISA = ('Exporter') ;
 @EXPORT = qw(trim sprin quickdump cfparse dump_items) ;
 @EXPORT = (@EXPORT,qw(hyphenate unhyphenate)) ;
+@EXPORT = (@EXPORT,qw(hslice)) ;
+@EXPORT = (@EXPORT,qw(lparse lprops)) ;
 
+################################################################
+sub lparse {
+    my $s = shift ;
+    my $r = [extract_multiple($s,
+			      [sub {extract_bracketed($_[0],'()')}],
+			      undef,
+			      1
+	     )] ;
+    $r ;
+}
+
+sub lprops {
+    my $s = shift ;
+    my $p ;
+    my $r = lparse $s ;
+    for (@$r) {
+	s!^.!!s ;
+	s!.$!!s ;
+	my ($k,$v) = split(/\s+/,$_,2) ;
+	$p->{$k} = $v || "" ;
+    }
+    $p ;
+}
+    
+################################################################
+sub hslice ($@) {
+    my $h = shift ;
+    my @z = map {defined $h->{$_} ? ($_ => $h->{$_}) : ()} @_ ;
+    @z ;
+}
+
+################################################################
 sub trim {
     $_[0] =~ s!^\s+!! ;
     $_[0] =~ s!\s+$!! ;
@@ -54,13 +88,19 @@ use Text::Balanced(qw(extract_bracketed
 sub cfparse {
     my $s = shift ;
     my $r = {} ;
-    $s =~ s!(static|extern)(.*?)(?=\{)!!s ;
+    $s =~ s!(static|extern)(.*?)(?=[\{;])!!s ;
     $r->{dec} = "$1$2" ;
     $r->{dec} =~ s!/\*.*?\*/! !gs ;
     $r->{dec} =~ s!\s+! !gs ;
     $r->{dec} =~ s!\s*$!! ;
-    $s =~ s!.*?(?=\{)!!s ;
-    $r->{body} = extract_bracketed($s,'{}"','\s*') ;
+
+    $s =~ s!.*?(?=[\{;])!!s ;
+    if ($s =~ m!^;!) {
+	# extern or forward declaration - no body
+    }
+    else {
+	$r->{body} = extract_bracketed($s,'{}"','\s*') ;
+    }
 
     my $d = $r->{dec} ;
     $d =~ s!(\w+)\s*(?=\()! ! ;
@@ -93,7 +133,9 @@ sub cfparse {
 	    last ;
 	}
 	$d =~ s!,!! ;
-	push @{$r->{args}},$a ;
+	if ($a->{type} ne 'void') {
+	    push @{$r->{args}},$a ;
+	}
     }
     $r ;
 }
