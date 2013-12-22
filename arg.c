@@ -12,6 +12,8 @@ extern "C" {
 
 #include	"arg.h"
 
+#include	".gen/arg.h"
+
 extern void arg_copy(char **from,char *to)
 {
     if (*from) free(*from) ;
@@ -489,8 +491,6 @@ extern int argitem_try(ARGITEM **ii,char *name,char *value,void *a0)
     }
 
 /* ================================================================ */
-#include	".gen/arg.h"
-
 static void argset_null_om_gethelp(ARGSET *as,MT *mto)
 {
     ARGITEM **ii,*i ;
