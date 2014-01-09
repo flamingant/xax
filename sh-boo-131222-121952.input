@@ -1,0 +1,8 @@
+#~type:{shell.input-history}
+##host:boo
+##nobackup##
+echo $PATH
+git
+cd ..
+cd ../libnpu/
+mkdir .log
