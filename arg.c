@@ -14,6 +14,20 @@ extern "C" {
 
 #include	".gen/arg.h"
 
+/* ================================================================ */
+extern ARGSET **is_argset_start(void)
+{
+    extern ARGSET *__start_LIM_ARGSET[] ;
+    return __start_LIM_ARGSET ;
+    }
+
+extern ARGSET **is_argset_end(void)
+{
+    extern ARGSET *__stop_LIM_ARGSET[] ;
+    return __stop_LIM_ARGSET ;
+    }
+
+/* ================================================================ */
 extern void arg_copy(char **from,char *to)
 {
     if (*from) free(*from) ;
@@ -162,7 +176,7 @@ extern char *arg_get_submode(int argc,char **argv)
     }
 
 /* ================================================================ */
-static int as_arg_long(int argc,char **argv,ARGSET **as)
+static int as_arg_long(int argc,char **argv,ARGSET **as,ARGSET **as_end)
 {
     char *arg = (char *) alloca(strlen(*argv)+1) ;
     strcpy(arg,*argv) ;
@@ -173,7 +187,7 @@ static int as_arg_long(int argc,char **argv,ARGSET **as)
 
 {
     int asf ;
-    for ( ; *as ; as++) {
+    for ( ; as < as_end ; as++) {
 	asf = (*as)->omf(*as,ARGM_ARGTRY,(u32) z) ;
 	if (asf == ASF_DEFERRED) return asf ;
 	if (asf != ASF_ARGIGNORED) {
@@ -190,7 +204,7 @@ static int as_arg_long(int argc,char **argv,ARGSET **as)
  }
  }
     
-extern int argset_try_as(int argc,char **argv,ARGSET **as,int die)
+extern int argset_try_as(int argc,char **argv,ARGSET **as,ARGSET **as_end,int die)
 {
     int		i ;
     int		asf ;
@@ -200,7 +214,7 @@ extern int argset_try_as(int argc,char **argv,ARGSET **as,int die)
 	if (*arg == '-') {
 	    switch (*(arg+1)) {
 	    case '-':
-		asf = as_arg_long(argc-i,argv+i,as) ;
+		asf = as_arg_long(argc-i,argv+i,as,as_end) ;
 		if (die && asf == ASF_ARGUNKNOWN)
 		    errorfatal("try %s --help for help\n",argv[0]) ;
 		break ;
@@ -213,11 +227,9 @@ extern int argset_try_as(int argc,char **argv,ARGSET **as,int die)
     return(argc) ;
     }
 
-extern ARGSET *argset_initvec[] ;
-
 extern int argset_try_all(int argc,char **argv)
 {
-    return argset_try_as(argc,argv,argset_initvec,1) ;
+    return argset_try_as(argc,argv,is_argset_start(),is_argset_end(),1) ;
     }
 
 extern int argset_try_one(int argc,char **argv,ARGSET *s)
@@ -225,7 +237,7 @@ extern int argset_try_one(int argc,char **argv,ARGSET *s)
     ARGSET *as[2] ;
     as[0] = s ;
     as[1] = 0 ;
-    return argset_try_as(argc,argv,as,0) ;
+    return argset_try_as(argc,argv,as,as+1,0) ;
     }
 
 /* ================================================================ */

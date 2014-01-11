@@ -95,6 +95,9 @@ extern int argset_try_one(int argc,char **argv,ARGSET *s) ;
 #define ARGSET_SECTION_ADD(x) \
     ARGSET *is_ ## x __attribute__ ((section ("LIM_ARGSET"))) = { x } ;
 
+extern ARGSET **is_argset_start(void) ;
+extern ARGSET **is_argset_end(void) ;
+
 #endif
 
 #ifdef __cplusplus /*Z*/
