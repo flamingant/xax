@@ -52,6 +52,13 @@ extern char *memtocstring(char *s,int len)
     }
 
 /* ================================================================ */
+extern void mtunput(MT *mt,int size)
+{
+    if (size > MTGapSize(mt)) size = MTGapSize(mt) ;
+    MTADVANCE(mt,-size) ;
+    }
+
+/* ================================================================ */
 extern MT *mtauto(int size)
 {
     MT *r = (MT *) malloc(sizeof(MT)) ;

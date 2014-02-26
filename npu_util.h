@@ -21,6 +21,8 @@ extern void freenz(void *) ;
 
 #include	<pu/mt.h>
 
+extern void mtunput(MT *mt,int size) ;
+
 extern MT *mtauto(int size) ;
 extern void mtauto_free(MT *mt) ;
 
