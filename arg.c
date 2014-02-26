@@ -15,16 +15,16 @@ extern "C" {
 #include	".gen/arg.h"
 
 /* ================================================================ */
-extern ARGSET **is_argset_start(void)
+extern ARGSET **GSV_ARGSET_start(void)
 {
-    extern ARGSET *__start_LIM_ARGSET[] ;
-    return __start_LIM_ARGSET ;
+    extern ARGSET *__start_GSV_ARGSET[] ;
+    return __start_GSV_ARGSET ;
     }
 
-extern ARGSET **is_argset_end(void)
+extern ARGSET **GSV_ARGSET_end(void)
 {
-    extern ARGSET *__stop_LIM_ARGSET[] ;
-    return __stop_LIM_ARGSET ;
+    extern ARGSET *__stop_GSV_ARGSET[] ;
+    return __stop_GSV_ARGSET ;
     }
 
 /* ================================================================ */
@@ -229,7 +229,7 @@ extern int argset_try_as(int argc,char **argv,ARGSET **as,ARGSET **as_end,int di
 
 extern int argset_try_all(int argc,char **argv)
 {
-    return argset_try_as(argc,argv,is_argset_start(),is_argset_end(),1) ;
+    return argset_try_as(argc,argv,GSV_ARGSET_start(),GSV_ARGSET_end(),1) ;
     }
 
 extern int argset_try_one(int argc,char **argv,ARGSET *s)
