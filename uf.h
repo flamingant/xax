@@ -49,6 +49,7 @@ typedef enum __enum_UFM {
 
     UFM_PRE_NOTIFY,
     UFM_POST_NOTIFY,
+    UFM_BUFFER_DRAIN,
     UFM__STD_AFTERLAST,
 
     UFM__HT_FIRST	= 100,
