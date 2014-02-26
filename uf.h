@@ -16,6 +16,9 @@ typedef struct __struct_HT HT ;
 typedef union {
     void	*v ;
     HT		*ht ;
+#ifdef UFD_MEMBERS
+UFD_MEMBERS
+#endif
     } UFD ;
 
 typedef u32 (*UFF)(UF *,int,u32) ;
