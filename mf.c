@@ -271,11 +271,6 @@ extern MF *mem_mf_open(u8 *s,int n)
 /* ================================================================ */
 /* STD	wrapper around stdio FILE stream			    */
 /* ================================================================ */
-typedef struct {
-    MFM		*m ;
-    FILE	*f ;
-    } STD_MF ;
-
 static u32 std_mf_mf(MFM *m,int i,u32 a0)
 {
     switch(i) {

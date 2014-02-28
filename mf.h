@@ -81,16 +81,23 @@ extern u32 null_mf_f(MF *f,int i,u32 a0) ;
 
 extern MF *null_mf_open(void) ;
 /* ================================================================ */
-
 extern MFM mem_mfm[] ;
-
 extern MF *mem_mf_open(u8 *,int) ;
+/* ================================================================ */
+typedef struct {
+    MFM		*m ;
+    FILE	*f ;
+    } STD_MF ;
 
+extern MFM std_mfm[] ;
+extern MF *std_mf_open(FILE *) ;
+/* ================================================================ */
 extern MFM file_mfm[] ;
-extern MFM disk_mfm[] ;
-
 extern MF *file_mf_open(char *) ;
+/* ================================================================ */
+extern MFM disk_mfm[] ;
 extern MF *disk_mf_open(char *) ;
+/* ================================================================ */
 
 extern void mf_close(MF *) ;
 
