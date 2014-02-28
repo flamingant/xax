@@ -18,12 +18,6 @@ extern "C" {
 #include	"log.h"
 /* ~# use collect ; collect::register_all('logsec','^LOGSEC (\w+)','$1') ; #~ */
 
-#define LF_STDOUT		1
-#define LF_STDERR		2
-#define LF_OPENFAIL		4
-
-#define LF_TIMESTAMP		8
-
 typedef struct {
     FILE	*f ;
     char	*filename ;
@@ -33,6 +27,7 @@ typedef struct {
 	} t ;
     int		flags ;
     char	*tsf ;
+    int		sequence ;
     } LOG_G ;
 
 LOG_G log_g = {
@@ -42,6 +37,12 @@ LOG_G log_g = {
     LF_STDOUT | LF_TIMESTAMP,
     "%H%M%S",
 } ;
+
+extern void log_prefix_set(int n)
+{
+    log_g.flags &= ~(LF_TIMESTAMP | LF_SEQUENCE) ;
+    log_g.flags |= n ;
+    }
 
 extern void log_close(void)
 {
@@ -161,6 +162,14 @@ static int argf__log_date(char *name,char *value,void *a0)
 static int argf__log_time_format(char *name,char *value,void *a0)
 {
     log_g.tsf = strdup(value) ;
+    return(ASF_ARGACCEPTED) ;
+}
+
+/* ~~arg(help => "Set log prefix to sequence number",value => "bool")~~ */
+static int argf__log_prefix_sequence(char *name,char *value,void *a0)
+{
+    if (strtol(value,0,10))
+	log_prefix_set(LF_SEQUENCE) ;
     return(ASF_ARGACCEPTED) ;
 }
 
@@ -308,6 +317,8 @@ static void log_line_start(LOGSEC *ls)
 {
     if (log_g.flags & LF_TIMESTAMP)
 	log_timestamp(ls) ;
+    if (log_g.flags & LF_SEQUENCE)
+	log_printf_c(ls,"%05d:",log_g.sequence++) ;
     if (ls->name)
 	log_printf_c(ls,"%s:",ls->name) ;
     }

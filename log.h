@@ -17,6 +17,13 @@ typedef struct {
     int		enable ;
     } LOGSEC ;
 
+#define LF_STDOUT		1
+#define LF_STDERR		2
+#define LF_OPENFAIL		4
+
+#define LF_TIMESTAMP		8
+#define LF_SEQUENCE		16
+
 extern LOGSEC ls_generic[] ;
 
 extern int log_init(int,char **) ;
@@ -31,6 +38,8 @@ extern void log_set(FILE *f) ;
 extern void log_open(char *file) ;
 
 extern void log_vprintf(LOGSEC *ls,char *fmt,va_list va) ;
+
+extern void log_prefix_set(int n) ;
 
 /* continuation - no prefix is output */
 
