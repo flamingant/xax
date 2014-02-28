@@ -154,7 +154,10 @@ sub argset_c {
 	$Q{help},
 	$IV{flags},
 	$I{omf},
-} ;\n" ;
+} ;\n
+
+GSV_ARGSET_ADD(argset_$I{name}) ;
+" ;
     push @$o,"\n/* ================================================================ */\n" ;
     (@$os,@$o) ;
 }
