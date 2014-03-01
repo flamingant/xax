@@ -9,6 +9,22 @@ typedef u32 VCFA ;
 
 typedef u32 (*VCFFUN)(void *,int,VCFA) ;
 
+typedef struct __struct_VCFT VCFT ;	/* VCF Type */
+typedef struct __struct_VCFB VCFB ;	/* VCF Binding */
+
+struct __struct_VCFT {
+    char	*name ;
+    int		(*decode)(VCFB *,char *) ;
+    int		(*encode)(VCFB *,MT *) ;
+    int		(*charspecial)(VCFB *,char *) ;
+    } ;
+
+struct __struct_VCFB {
+    char	*name ;
+    VCFT	*type ;
+    void	*data ;
+    } ;
+
 /*
 ~# use decode ; #~
 ~~define_decode("VCF_(\\w+)")~~
@@ -27,6 +43,13 @@ typedef u32 (*VCFFUN)(void *,int,VCFA) ;
 
 #define VCF_GET_NAME		7
 #define VCF_GET_STATE		8
+
+#define VCF_CHARSPECIAL		9
+
+extern VCFB *vcfb_lookup(VCFB *v,char *name) ;
+
+extern VCFT vcft_int[] ;
+extern VCFT vcft_bool[] ;
 
 extern int switch_state_write(MT *mt,int st) ;
 extern int switch_state_read(char *cmd) ;
