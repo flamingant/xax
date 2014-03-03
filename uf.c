@@ -508,20 +508,37 @@ static void uf_select_ok(UF *uf,int type)
     uf_send(uf,UFM_SELECT_OK,type) ;
     }
 
-static void ufs_select(void)
+static void ufs_select_scan(fd_set *set,int type)
 {
     int i ;
+    if (!set) return ;
+    for (i = ufs.sel.min_open ; i <= ufs.sel.max_open ; i++) {
+	if (FD_ISSET(i,set))
+	    uf_select_ok(ufs.sel.uf[i],type) ;
+	}
+    }
+
+static void ufs_select(void)
+{
     int s ;
-    fd_set	*rfd ;
-    fd_set	*wfd ;
-    fd_set	*efd ;
+    fd_set	*rfd = 0 ;
+    fd_set	*wfd = 0 ;
+    fd_set	*efd = 0 ;
     int size = ufs.sel.max_fd / NBBY ;
-    rfd = (fd_set *) alloca(size) ;
-    wfd = (fd_set *) alloca(size) ;
-    efd = (fd_set *) alloca(size) ;
-    memcpy(rfd,ufs.sel.rfd,size) ;
-    memcpy(wfd,ufs.sel.rfd,size) ;
-    memcpy(efd,ufs.sel.rfd,size) ;
+    if (ufs.sel.rfd) {
+	rfd = (fd_set *) alloca(size) ;
+	memcpy(rfd,ufs.sel.rfd,size) ;
+	}
+    if (ufs.sel.wfd) {
+	wfd = (fd_set *) alloca(size) ;
+	memcpy(wfd,ufs.sel.wfd,size) ;
+	}
+    if (ufs.sel.rfd || ufs.sel.wfd) {
+	efd = (fd_set *) alloca(size) ;
+	memcpy(efd,ufs.sel.rfd,size) ;
+	/* xor wfd flags here */
+	}
+	
     s = select(ufs.sel.max_open+1,rfd,wfd,efd,&ufs.sel.tv) ;
     if (s == -1) {
 	return ;
@@ -529,14 +546,9 @@ static void ufs_select(void)
     if (s == 0) {
 	return ;
 	}
-    for (i = ufs.sel.min_open ; i <= ufs.sel.max_open ; i++) {
-	if (FD_ISSET(i,rfd))
-	    uf_select_ok(ufs.sel.uf[i],0) ;
-	if (FD_ISSET(i,wfd))
-	    uf_select_ok(ufs.sel.uf[i],1) ;
-	if (FD_ISSET(i,efd))
-	    uf_select_ok(ufs.sel.uf[i],2) ;
-	}
+    ufs_select_scan(rfd,0) ;
+    ufs_select_scan(wfd,1) ;
+    ufs_select_scan(efd,2) ;
     }
 
 extern void ufs_loop(void)
