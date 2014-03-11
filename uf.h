@@ -79,12 +79,24 @@ typedef struct {
     u8		ufm[UFM__COUNT] ;
     } UF_TRACE ;
 
+typedef struct __struct_UFQ UFQ ;
+
+struct __struct_UFQ {
+    int		m ;
+    u32		a ;
+    UFQ		*next ;
+    } ;
+
 struct __struct_UF {
     UFF		f ;
     UFD		d ;
     int		state ;
     UF		*parent ;
     UF_TRACE	trace ;
+    struct {
+	UFQ	*head ;
+	UFQ	**tail ;
+	} queue ;
     } ;
 
 typedef struct {
@@ -100,6 +112,8 @@ extern void uf_socket_register(UF *uf,int fd) ;
 
 extern u32 uf_send(UF *uf,int m,u32 a) ;
 extern u32 uf_send_direct(UF *uf,int m,u32 a) ;
+
+extern void uf_queue(UF *uf,int m,u32 a) ;
 
 extern u32 uf_parent_notify(UF *uf,int nm,int m,u32 a) ;
 

@@ -22,6 +22,7 @@ extern "C" {
 #include	"pu/rcons.h"
 #include	"pu/regex.h"
 #include	"pu/sk.h"
+#include	"pu/rat.h"
 
 #include	"uf.h"
 
@@ -50,6 +51,8 @@ static struct {
 	} sel ;
     int		ufm_count ;
     int		max_poll ;
+
+    RAY		ufq_ray[1] ;
     } ufs ;
 
 extern u32 uf_send_direct(UF *uf,int m,u32 a)
@@ -332,6 +335,40 @@ extern u32 uf_send(UF *uf,int m,u32 a)
     }
 
 /* ================================================================ */
+static UFQ *ufq_alloc(void)
+{
+    return ray_ualloc(ufs.ufq_ray) ;
+}
+
+static void ufq_free(UFQ *q)
+{
+    ray_free(ufs.ufq_ray,q) ;
+}
+
+extern void uf_queue_tail(UF *uf,int m,u32 a)
+{
+    UFQ		*q = ufq_alloc() ;
+    q->m = m ;
+    q->a = a ;
+    q->next = 0 ;
+    *uf->queue.tail = q ;
+    uf->queue.tail = &q->next ;
+    }
+
+extern void uf_queue(UF *uf,int m,u32 a)
+{
+    if (!uf->queue.head) uf_queue_tail(uf,m,a) ;
+    return ;
+{
+    UFQ		*q = ufq_alloc() ;
+    q->m = m ;
+    q->a = a ;
+    q->next = uf->queue.head ;
+    uf->queue.head = q ;
+    }
+    }
+
+/* ================================================================ */
 extern void uf_trace_va(UF *uf,char *fmt,va_list va)
 {
     MT		mt[1] ;
@@ -390,6 +427,8 @@ extern UF *uf_create(UFF f,void *d,void *cp)
     uf->d.v = d ;
     uf->state = 0 ;
     uf->parent = 0 ;
+    uf->queue.head = 0 ;
+    uf->queue.tail = &uf->queue.head ;
 {
     UFSS	*ss = (UFSS *) uf_send_direct(uf,UFM_GET_STATIC,0) ;
     if (ss) uf->trace = ss->trace ;
@@ -559,6 +598,9 @@ extern void ufs_loop(void)
 	while ((r = *rr) != 0 && n-- > 0) {
 	    UF *uf = (UF *) r->car ;
 	    int us ;
+	    if (uf->queue.head) {
+		uf_send(uf,uf->queue.head->m,uf->queue.head->a) ;
+		}
 	    if (us = uf_send(uf,UFM_ACTION,0)) {
 		uf_send(uf,UFM_STATE_REPORT,us) ;
 		}
@@ -587,6 +629,9 @@ extern int ufs_init(int argc,char **argv)
     ufs.ufm_count = UFM__COUNT ;
     argc = arg_read_simple(argc,argv,ufs_long_arg_fun,0) ;
     printg_register("uf",(PFF_S) pff_uf) ;
+    ufs.ufq_ray->rat->unit_size = sizeof(UFQ) ;
+    ufs.ufq_ray->rat->units_per_node = 128 ;
+    ray_init(ufs.ufq_ray) ;
     return(argc) ;
     }
 
@@ -600,6 +645,7 @@ extern void ufs_destroy(void)
     freenz(ufs.sel.rfd) ;
     freenz(ufs.sel.wfd) ;
     freenz(ufs.sel.uf) ;
+    ray_destroy(ufs.ufq_ray) ;
     }
 
 extern void ufs_quit(void)
