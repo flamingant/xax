@@ -368,6 +368,13 @@ extern void uf_queue(UF *uf,int m,u32 a)
     }
     }
 
+extern void uf_unqueue_head(UF *uf)
+{
+    UFQ		*q = uf->queue.head ;
+    if (!(uf->queue.head = q->next)) uf->queue.tail = &uf->queue.head ;
+    ufq_free(q) ;
+    }
+
 /* ================================================================ */
 extern void uf_trace_va(UF *uf,char *fmt,va_list va)
 {
