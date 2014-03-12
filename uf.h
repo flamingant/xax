@@ -39,10 +39,10 @@ typedef enum __enum_UFM {
 
     UFM_QUEUE_ADD,
     UFM_READ,
-    UFM_ACTION,
+    UFM_CONNECT,
+    UFM_CONNECT_OK,
     UFM_SELECT_OK,
     UFM_WAKEUP,
-    UFM_STATE_REPORT,
 
     UFM_OPTION_TRY,
     UFM_GET_STATIC,
@@ -50,6 +50,7 @@ typedef enum __enum_UFM {
     UFM_PRE_NOTIFY,
     UFM_POST_NOTIFY,
     UFM_BUFFER_DRAIN,
+
     UFM__STD_AFTERLAST,
 
     UFM__HT_FIRST	= 100,
@@ -114,6 +115,8 @@ extern u32 uf_send(UF *uf,int m,u32 a) ;
 extern u32 uf_send_direct(UF *uf,int m,u32 a) ;
 
 extern void uf_queue(UF *uf,int m,u32 a) ;
+extern void uf_queue_tail(UF *uf,int m,u32 a) ;
+extern void uf_unqueue_head(UF *uf) ;
 
 extern u32 uf_parent_notify(UF *uf,int nm,int m,u32 a) ;
 

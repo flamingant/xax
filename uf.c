@@ -109,14 +109,14 @@ static int ufm_arg_describe_base(UF *f,int m,u32 a,MT *mt)
     case UFM_CREATE:
     case UFM_DESTROY:
     case UFM_READ:
-    case UFM_ACTION:
+    case UFM_CONNECT:
+    case UFM_CONNECT_OK:
     case UFM_SELECT_OK:
     case UFM_WAKEUP:
 
     case UFM_HT_RESPONSE_BODY:
     case UFM_DESCRIBE:
     case UFM_QUEUE_ADD:
-    case UFM_STATE_REPORT:
     default:
 	mtprintf(mt,"%x ",a) ;
     }
@@ -604,12 +604,8 @@ extern void ufs_loop(void)
 	int	n = ufs.max_poll ;
 	while ((r = *rr) != 0 && n-- > 0) {
 	    UF *uf = (UF *) r->car ;
-	    int us ;
 	    if (uf->queue.head) {
 		uf_send(uf,uf->queue.head->m,uf->queue.head->a) ;
-		}
-	    if (us = uf_send(uf,UFM_ACTION,0)) {
-		uf_send(uf,UFM_STATE_REPORT,us) ;
 		}
 	    if (uf->state & UFS_DESTROY) {
 		uf_destroy(uf) ;
