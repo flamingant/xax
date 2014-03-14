@@ -454,6 +454,8 @@ static void uf_destroy_no_unlink(UF *uf)
 extern void uf_destroy(UF *uf)
 {
     rcons_delete(uf,&ufs.uf_reg) ;
+    while (uf->queue.head)
+	uf_unqueue_head(uf) ;
     uf_destroy_no_unlink(uf) ;
     }
 
