@@ -52,26 +52,6 @@ extern char *memtocstring(char *s,int len)
     }
 
 /* ================================================================ */
-extern void mtunput(MT *mt,int size)
-{
-    if (size > MTGapSize(mt)) size = MTGapSize(mt) ;
-    MTADVANCE(mt,-size) ;
-    }
-
-/* ================================================================ */
-extern MT *mtauto(int size)
-{
-    MT *r = (MT *) malloc(sizeof(MT)) ;
-    mtmalloc(r,size) ;
-    return r ;
-    }
-
-extern void mtauto_free(MT *mt)
-{
-    free(mt->s) ;
-    free(mt) ;
-    }
-
 /* ================================================================ */
 /* cache a zero-terminated string in MT and return pointer to cached copy */
 
@@ -139,60 +119,12 @@ extern void mtstrdup_all(MT *a)
     }
     }
 
-/* like strspn for MT, but with limit offset */
-
-extern int mtspn_n(MT *m,char *s,int max)
-{
-    char *p = m->c ;
-    char *e = m->e ;
-    int n ;
-    if (max < e-p) e = p+max ;
-    while (p < e && strchr(s,*p)) p++ ;
-    n = p - m->c ;
-    m->c = p ;
-    return n ;
-    }
-
-/* like strspn for MT */
-
-extern int mtspn(MT *m,char *s)
-{
-    char *p = m->c ;
-    char *e = m->e ;
-    int n ;
-    while (p < e && strchr(s,*p)) p++ ;
-    n = p - m->c ;
-    m->c = p ;
-    return n ;
-    }
-
 extern void mt_dump_f(MT *mt,FILE *f)
 {
     char	*s ;
     for (s = mt->s ; s < mt->c ; s++) fputc(*s,f) ;
     fputs("\n",f) ;
     fflush(f) ;
-    }
-
-/* copy entire source mt into a destination mt */
-
-extern void mtcpymt_all(MT *md,MT *ms)
-{
-    mtput(md,ms->s,MTAllSize(ms)) ;
-    }
-
-/* copy source mt from start to fill into a destination mt */
-
-extern void mtcpymt_prefill(MT *md,MT *ms)
-{
-    mtput(md,ms->s,MTFillSize(ms)) ;
-    }
-
-/* copy source mt from fill to end into a destination mt */
-
-extern void mtcpymt_postfill(MT *md,MT *ms)
-{
-    mtput(md,ms->c,MTAllSize(ms) - MTFillSize(ms)) ;
     }
 
 /* ================================================================ */

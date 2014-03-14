@@ -21,24 +21,12 @@ extern void freenz(void *) ;
 
 #include	<pu/mt.h>
 
-extern void mtunput(MT *mt,int size) ;
-
-extern MT *mtauto(int size) ;
-extern void mtauto_free(MT *mt) ;
-
 extern int mt_file_contents(MT *mt,char *name,int mode) ;
 
 extern void mt_set_line(MT *m) ;
 extern void mtstrdup_all(MT *a) ;
 
 extern void mtstrdup_fill_pad(MT *a,int n) ;
-
-extern int mtspn_n(MT *m,char *s,int max) ;
-extern int mtspn(MT *m,char *s) ;
-
-extern void mtcpymt_all(MT *md,MT *ms) ;
-extern void mtcpymt_prefill(MT *md,MT *ms) ;
-extern void mtcpymt_postfill(MT *md,MT *ms) ;
 
 extern void mtcpymt_all_escape_nl(MT *mtd,MT *mts) ;
 extern void mtcpymt_to_first_nl(MT *mtd,MT *mts) ;
