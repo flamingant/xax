@@ -182,6 +182,7 @@ extern int ufss_trace_arg_try(UFSS *ss,char *s,int cmd)
 	ufss_trace_arg_try(ss,"UFM_CREATE",cmd) ;
 	ufss_trace_arg_try(ss,"UFM_DESTROY",cmd) ;
 	ufss_trace_arg_try(ss,"UFM_SELECT_OK",cmd) ;
+	ufss_trace_arg_try(ss,"UFM_DISCONNECT_IND",cmd) ;
 	return(1) ;
 	}
     else {
