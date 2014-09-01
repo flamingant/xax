@@ -15,6 +15,7 @@ extern "C" {
 typedef struct {
     char	*name ;
     int		enable ;
+    char	*description ;
     } LOGSEC ;
 
 #define LF_STDOUT		1

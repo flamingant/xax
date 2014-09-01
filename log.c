@@ -176,6 +176,22 @@ static int argf__log_prefix_sequence(char *name,char *value,void *a0)
 /* ================================================================ */
 #include	"vcf.h"
 
+/* ~~arg(help => "List all logging sections",type => "bool")~~ */
+static int argf__log_section_list(char *name,char *value,void *a0)
+{
+    int		vcf = switch_state_read(value) ;
+    LOGSEC **ls ;
+    if (vcf == VCF_SWITCH_OFF) goto done ; 
+    for (ls = logsec_initvec ; *ls ; ls++) {
+	LOGSEC *s = *ls ;
+	printf("%-16s %1s %s\n",s->name,
+	       s->enable ? "+" : " ",
+	       s->description ? s->description : "") ;
+	}
+done :
+    return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
+}
+
 /* ~~arg(help => "All logging sections switch on/off",type => "bool")~~ */
 static int argf__log_section_all(char *name,char *value,void *a0)
 {
