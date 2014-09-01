@@ -2,8 +2,8 @@
 extern "C" {
 #endif
 
-#ifndef __dp_h
-#define __dp_h
+#ifndef __do_h
+#define __do_h
 
 #include	<stdio.h>
 
