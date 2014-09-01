@@ -28,6 +28,22 @@ extern ARGSET **GSV_ARGSET_end(void)
     }
 
 /* ================================================================ */
+extern int ali_as_try(ALI *z,ARGSET **as,ARGSET **as_end)
+{
+    int asf ;
+    for ( ; as < as_end ; as++) {
+	asf = (*as)->omf(*as,ARGM_ARGTRY,(u32) z) ;
+	if (asf != ASF_ARGIGNORED) return asf ;
+	}
+    return(ASF_ARGUNKNOWN) ;
+    }
+    
+extern int ali_as_all_try(ALI *z)
+{
+    return(ali_as_try(z,GSV_ARGSET_start(),GSV_ARGSET_end())) ;
+    }
+    
+/* ================================================================ */
 extern void arg_copy(char **from,char *to)
 {
     if (*from) free(*from) ;

@@ -80,6 +80,9 @@ typedef struct {
     int		n ;
     } ALI ;
 
+extern int ali_as_all_try(ALI *z) ;
+extern int ali_as_try(ALI *z,ARGSET **as,ARGSET **as_end) ;
+
 extern ARGITEM *argitem_find(ARGITEM **ii,char *name) ;
 extern int argitem_try(ARGITEM **ii,char *name,char *value,void *a0) ;
 
