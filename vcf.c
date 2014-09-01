@@ -12,6 +12,7 @@ extern "C" {
 
 extern int switch_state_read(char *cmd)
 {
+    if (!cmd || !*cmd) return VCF_NOVALUE ;
     if (!stricmp(cmd,"toggle") || 
 	!strcmp(cmd,"^")) {
 	return(VCF_SWITCH_TOGGLE) ;

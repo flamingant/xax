@@ -30,6 +30,7 @@ struct __struct_VCFB {
 ~~define_decode("VCF_(\\w+)")~~
 */
 
+#define VCF_NOVALUE		-2
 #define VCF_UNKNOWN		-1
 
 #define VCF_GETINT		0
