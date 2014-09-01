@@ -631,7 +631,7 @@ extern int ufs_init(int argc,char **argv)
     ufs.sel.max_open = -1 ;
     ufs.sel.max_fd = -1 ;
     ufs.sel.tv.tv_sec = 0 ;
-    ufs.sel.tv.tv_usec = 100000 ;
+    ufs.sel.tv.tv_usec = 1000 ;
     ufs.ufm_count = UFM__COUNT ;
     argc = arg_read_simple(argc,argv,ufs_long_arg_fun,0) ;
     printg_register("uf",(PFF_S) pff_uf) ;
