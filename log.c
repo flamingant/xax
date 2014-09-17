@@ -259,12 +259,45 @@ extern int log_init(int argc,char **argv)
     return argc ;
     }
 	
+/* ================================================================ */
+static void log_vprintf_c_(LOGSEC *ls,char *fmt,va_list va)
+{
+    if (log_g.f) {
+	vfprintf(log_g.f,fmt,va) ;
+	fflush(log_g.f) ;
+	}
+    if (log_g.t.f) {
+	vfprintf(log_g.t.f,fmt,va) ;
+	fflush(log_g.t.f) ;
+	}
+    }
+
+/* ================================================================ */
 static int log_enabled(void)
 {
     if (log_g.f) return(1) ;
     if (log_g.flags & LF_OPENFAIL) return(0) ;
     log_init(0,0) ;
     return(log_enabled()) ;
+    }
+
+extern void log_vprintf_c(LOGSEC *ls,char *fmt,va_list va)
+{
+    if (!ls->enable || !log_enabled()) return ;
+    log_vprintf_c_(ls,fmt,va) ;
+    }
+
+extern void log_printf_c(LOGSEC *ls,char *fmt,...)
+{
+    va_list	va ;
+    va_start(va,fmt) ;
+    log_vprintf_c(ls,fmt,va) ;
+    }
+
+extern void log_puts_c(LOGSEC *ls,char *s)
+{
+    if (!ls->enable || !log_enabled()) return ;
+    log_write_s(ls,s) ;
     }
 
 extern void log_write(LOGSEC *ls,char *pb,int cb)
@@ -283,30 +316,6 @@ extern void log_write(LOGSEC *ls,char *pb,int cb)
 extern void log_write_s(LOGSEC *ls,char *s)
 {
     log_write(ls,s,strlen(s)) ;
-    }
-
-extern void log_vprintf_c(LOGSEC *ls,char *fmt,va_list va)
-{
-    if (log_g.f) {
-	vfprintf(log_g.f,fmt,va) ;
-	fflush(log_g.f) ;
-	}
-    if (log_g.t.f) {
-	vfprintf(log_g.t.f,fmt,va) ;
-	fflush(log_g.t.f) ;
-	}
-    }
-
-extern void log_printf_c(LOGSEC *ls,char *fmt,...)
-{
-    va_list	va ;
-    va_start(va,fmt) ;
-    log_vprintf_c(ls,fmt,va) ;
-    }
-
-extern void log_puts_c(LOGSEC *ls,char *s)
-{
-    log_write_s(ls,s) ;
     }
 
 /* ================================================================ */
@@ -350,7 +359,7 @@ extern void log_vprintf(LOGSEC *ls,char *fmt,va_list va)
 {
     if (!ls->enable || !log_enabled()) return ;
     log_line_start(ls) ;
-    log_vprintf_c(ls,fmt,va) ;
+    log_vprintf_c_(ls,fmt,va) ;
     }
 
 extern void log_printf(LOGSEC *ls,char *fmt,...)
