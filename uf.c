@@ -157,7 +157,7 @@ extern u32 null_uff(UF *f,int m,u32 a)
 	return(f->trace.ufm[(int) ufm_offset((UFM) a)]) ;
     case UFM_TYPENAME:
 	mtprintf((MT *) a,"((UFF *) 0x%08x)",f->f) ;
-	return(0) ;
+	return(a) ;
     case UFM_DESCRIBE:
 	return(UF_SEND_RAW(f,UFM_TYPENAME,a)) ;
     case UFM_ARG_DESCRIBE:
