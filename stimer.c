@@ -262,7 +262,8 @@ static u32 stf_null(STIMER *st,int m,u32 a)
 extern void stimer_kill(STIMER *st)
 {
     if (!ANZW(st)) {return ;}
-    if (clocki.tid) {
+    if (stimer_clock_started()) {
+	/* can allow stimer_check to cleanup */
 	st->state |= STS_KILLED ;
 	st->state &= ~(STS_REARM | STS_PAUSE) ;
 	st->f = stf_null ;
