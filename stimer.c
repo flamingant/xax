@@ -1,7 +1,3 @@
-#ifdef __cplusplus /*Z*/
-extern "C" {
-#endif
-
 #include	"arg.h"
 
 #include	"npu_util.h"
@@ -304,7 +300,3 @@ extern void stimer_init(void)
     }
     }
 
-
-#ifdef __cplusplus /*Z*/
-}
-#endif
