@@ -4,20 +4,26 @@
 
 #include	<unistd.h>
 #include	<stdio.h>
+
+#if defined(__MINGW32__)
+#include	<winsock.h>
+#else
+#include	<time.h>
 #include	<sys/socket.h>
+#include	<sys/select.h>
 #include	<arpa/inet.h>
-#include	<stdlib.h>
 #include	<netdb.h>
+#include	<fcntl.h>
+#endif
+
+#include	<stdlib.h>
 #include	<string.h>
 
-#include	<fcntl.h>
 #include	<errno.h>
 
-#include	<sys/select.h>
 #include	<sys/param.h>
 
 #include	<signal.h>
-#include	<time.h>
 
 #include	"pu/mt.h"
 
