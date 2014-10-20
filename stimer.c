@@ -59,6 +59,18 @@ static void stimer_check(void) ;
 
 /* ================================================================ */
 #if defined(__MINGW32__)
+static void stimer_settime(int flags,const ITSP *new,ITSP *old)
+{
+    }
+
+extern void stimer_block(void)
+{
+    }
+
+extern void stimer_unblock(void)
+{
+    }
+
 #else
 /* ================================================================ */
 static void SIGALRM_h(int sig, siginfo_t *si, void *uc) ;
@@ -71,8 +83,6 @@ static void stimer_settime(int flags,const ITSP *new,ITSP *old)
     timer_settime(clocki.tid,0,new,old) ;
     }
 
-#endif
-/* ================================================================ */
 extern void stimer_block(void)
 {
     int		e ;
@@ -93,6 +103,17 @@ extern void stimer_unblock(void)
 	errorshow("sigprocmask fail\n") ;
     }
 
+static void SIGALRM_h(int sig, siginfo_t *si, void *uc)
+{
+    /* this looks stupid but allows alternate "elapsed time" strategy transparently */
+    clocki.ticks_old = clocki.ticks_new ;
+    clocki.ticks_new++ ;
+    clocki.ms_diff = MSTICK * (clocki.ticks_new - clocki.ticks_old) ;
+    stimer_check() ;
+    }
+
+#endif
+/* ================================================================ */
 extern void stimer_clock_restart(void)
 {
     static struct itimerspec it,ct ;
@@ -125,15 +146,6 @@ extern void stimer_clock_start(void)
 extern int stimer_clock_started(void)
 {
     return(clocki.running == 1) ;
-    }
-
-static void SIGALRM_h(int sig, siginfo_t *si, void *uc)
-{
-    /* this looks stupid but allows alternate "elapsed time" strategy transparently */
-    clocki.ticks_old = clocki.ticks_new ;
-    clocki.ticks_new++ ;
-    clocki.ms_diff = MSTICK * (clocki.ticks_new - clocki.ticks_old) ;
-    stimer_check() ;
     }
 
 /* ================================================================ */
