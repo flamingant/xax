@@ -71,6 +71,10 @@ extern void stimer_unblock(void)
 {
     }
 
+extern void stimer_clock_kill(void)
+{
+    }
+
 #else
 /* ================================================================ */
 static void SIGALRM_h(int sig, siginfo_t *si, void *uc) ;
@@ -111,6 +115,14 @@ static void SIGALRM_h(int sig, siginfo_t *si, void *uc)
     clocki.ms_diff = MSTICK * (clocki.ticks_new - clocki.ticks_old) ;
     stimer_check() ;
     }
+
+extern void stimer_clock_kill(void)
+{
+    if (clocki.tid) {
+	timer_delete(clocki.tid) ;
+	clocki.tid = 0 ;
+	}
+}
 
 #endif
 /* ================================================================ */
@@ -303,10 +315,7 @@ extern void stimer_onexit(void)
 {
     tt.r = rcons_free_list(tt.r) ;
     if (!RAY_EMPTY(tt.ra)) ray_destroy(tt.ra) ;
-    if (clocki.tid) {
-	timer_delete(clocki.tid) ;
-	clocki.tid = 0 ;
-	}
+    stimer_clock_kill() ;
 }
 
 extern void stimer_init(void)
