@@ -58,12 +58,16 @@ static void stimer_check(void) ;
 #define MSTICK	1000
 
 /* ================================================================ */
+#if defined(__MINGW32__)
+#else
+/* ================================================================ */
 static void SIGALRM_h(int sig, siginfo_t *si, void *uc) ;
-
 
 #define SIGBAG	(SIGRTMAX-1)
 #define SIG	SIGBAG
 
+#endif
+/* ================================================================ */
 extern void stimer_block(void)
 {
     int		e ;
