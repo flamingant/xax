@@ -75,6 +75,10 @@ extern void stimer_clock_kill(void)
 {
     }
 
+extern void stimer_init(void)
+{
+    }
+
 #else
 /* ================================================================ */
 static void SIGALRM_h(int sig, siginfo_t *si, void *uc) ;
@@ -123,6 +127,33 @@ extern void stimer_clock_kill(void)
 	clocki.tid = 0 ;
 	}
 }
+
+extern void stimer_init(void)
+{
+    if (clocki.tid) return ;
+{
+    int e ;
+    struct sigaction sa;
+    sa.sa_flags = SA_SIGINFO;
+    sa.sa_sigaction = SIGALRM_h ;
+    sigemptyset(&sa.sa_mask);
+    if ((e = sigaction(SIG, &sa, NULL) == -1))
+	errorshow("sigaction fail\n") ;
+
+    stimer_block() ;
+
+    clocki.ev->sigev_notify = SIGEV_SIGNAL ;
+    clocki.ev->sigev_signo = SIG ;
+    clocki.ev->sigev_value.sival_int = 0x3333 ;
+    clocki.ev->sigev_notify_function = 0 ;
+    clocki.ev->sigev_notify_attributes = 0 ;
+
+    if (timer_create(CLOCK_REALTIME,clocki.ev,&clocki.tid) == -1)
+	errorfatal("clock not created\n") ;
+
+    stimer_unblock() ;
+    }
+    }
 
 #endif
 /* ================================================================ */
@@ -318,31 +349,4 @@ extern void stimer_onexit(void)
     if (!RAY_EMPTY(tt.ra)) ray_destroy(tt.ra) ;
     stimer_clock_kill() ;
 }
-
-extern void stimer_init(void)
-{
-    if (clocki.tid) return ;
-{
-    int e ;
-    struct sigaction sa;
-    sa.sa_flags = SA_SIGINFO;
-    sa.sa_sigaction = SIGALRM_h ;
-    sigemptyset(&sa.sa_mask);
-    if ((e = sigaction(SIG, &sa, NULL) == -1))
-	errorshow("sigaction fail\n") ;
-
-    stimer_block() ;
-
-    clocki.ev->sigev_notify = SIGEV_SIGNAL ;
-    clocki.ev->sigev_signo = SIG ;
-    clocki.ev->sigev_value.sival_int = 0x3333 ;
-    clocki.ev->sigev_notify_function = 0 ;
-    clocki.ev->sigev_notify_attributes = 0 ;
-
-    if (timer_create(CLOCK_REALTIME,clocki.ev,&clocki.tid) == -1)
-	errorfatal("clock not created\n") ;
-
-    stimer_unblock() ;
-    }
-    }
 
