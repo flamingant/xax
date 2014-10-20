@@ -1,6 +1,4 @@
-#ifdef __cplusplus /*Z*/
-extern "C" {
-#endif
+#if !defined(__MINGW32__)
 
 #include <inttypes.h> /* uint8_t */
 #include <stdarg.h>
@@ -24,6 +22,4 @@ extern void tr_sha1 (uint8_t * setme, const void * content1, int content1_len, .
   SHA1_Final (setme, &sha);
 }
 
-#ifdef __cplusplus /*Z*/
-}
 #endif
