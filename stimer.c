@@ -66,6 +66,11 @@ static void SIGALRM_h(int sig, siginfo_t *si, void *uc) ;
 #define SIGBAG	(SIGRTMAX-1)
 #define SIG	SIGBAG
 
+static void stimer_settime(int flags,const ITSP *new,ITSP *old)
+{
+    timer_settime(clocki.tid,0,new,old) ;
+    }
+
 #endif
 /* ================================================================ */
 extern void stimer_block(void)
@@ -95,7 +100,7 @@ extern void stimer_clock_restart(void)
     it.it_value.tv_nsec = (1000000 * MSTICK) % 1000000000 ;
     it.it_interval.tv_sec = it.it_value.tv_sec ;
     it.it_interval.tv_nsec = (1000000 * MSTICK) % 1000000000 ;
-    timer_settime(clocki.tid,0,&it,&ct) ;
+    stimer_settime(0,&it,&ct) ;
     }
 
 extern void stimer_clock_stop(void)
@@ -107,7 +112,7 @@ extern void stimer_clock_stop(void)
     it.it_interval.tv_nsec = 0 ;
     it.it_value.tv_sec = 0 ;
     it.it_value.tv_nsec = 0 ;
-    timer_settime(clocki.tid,0,&it,&ct) ;
+    stimer_settime(0,&it,&ct) ;
     }
 
 extern void stimer_clock_start(void)
