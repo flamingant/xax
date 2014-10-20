@@ -7,6 +7,10 @@ extern "C" {
 
 #if defined(__MINGW32__)
 #include	<winsock.h>
+
+#define NBBY		8
+#define NOFILE		8192
+
 #else
 #include	<sys/socket.h>
 #include	<sys/select.h>
