@@ -33,6 +33,10 @@
 /* ================================================================ */
 typedef struct timeval TIME ;
 
+typedef struct timespec 	TIMESP ;
+typedef struct itimerspec 	ITSP ;
+
+/* ================================================================ */
 struct clocki {    
     TIME	time[1] ;
     int		ticks_old ;
@@ -40,17 +44,22 @@ struct clocki {
     int		ms_diff ;
     int		running ;
 
+#if defined(__MINGW32__)
+#else
     timer_t	tid ;
     struct sigevent ev[1] ;
+#endif
     } ;
 
 static struct clocki clocki ;
 
-static void SIGALRM_h(int sig, siginfo_t *si, void *uc) ;
-
 static void stimer_check(void) ;
 
 #define MSTICK	1000
+
+/* ================================================================ */
+static void SIGALRM_h(int sig, siginfo_t *si, void *uc) ;
+
 
 #define SIGBAG	(SIGRTMAX-1)
 #define SIG	SIGBAG
