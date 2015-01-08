@@ -126,6 +126,7 @@ extern u32 null_uff(UF *f,int m,u32 a) ;
 
 extern void uf_socket_unregister(UF *uf,int fd) ;
 
+extern void ufs_cycle(void) ;
 extern void ufs_loop(void) ;
 extern int ufs_init(int argc,char **argv) ;
 extern void ufs_destroy(void) ;

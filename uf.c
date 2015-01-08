@@ -610,28 +610,32 @@ static void ufs_select(void)
     ufs_select_scan(efd,2) ;
     }
 
+extern void ufs_cycle(void)
+{
+    RCONS	*r,**rr = &ufs.uf_poll ;
+    int	n = ufs.max_poll ;
+    while ((r = *rr) != 0 && n-- > 0) {
+	UF *uf = (UF *) r->car ;
+	if (uf->queue.head) {
+	    uf_send(uf,uf->queue.head->m,uf->queue.head->a) ;
+	}
+	if (uf->state & UFS_DESTROY) {
+	    uf_destroy(uf) ;
+	    *rr = r->cdr ;
+	    rcons_free(r) ;
+	}
+	else {
+	    rr = &r->cdr ;
+	}
+    }
+    ufs_select() ;
+    fflush(stdout) ;
+    }
+
 extern void ufs_loop(void)
 {
-    while (!ufs.quit) {
-	RCONS	*r,**rr = &ufs.uf_poll ;
-	int	n = ufs.max_poll ;
-	while ((r = *rr) != 0 && n-- > 0) {
-	    UF *uf = (UF *) r->car ;
-	    if (uf->queue.head) {
-		uf_send(uf,uf->queue.head->m,uf->queue.head->a) ;
-		}
-	    if (uf->state & UFS_DESTROY) {
-		uf_destroy(uf) ;
-		*rr = r->cdr ;
-		rcons_free(r) ;
-		}
-	    else {
-		rr = &r->cdr ;
-		}
-	    }
-	ufs_select() ;
-	fflush(stdout) ;
-	}
+    while (!ufs.quit)
+	ufs_cycle() ;
     }
 
 extern int ufs_init(int argc,char **argv)
