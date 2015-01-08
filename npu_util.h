@@ -52,7 +52,7 @@ extern char const *tfstring(int) ;
 extern void qlistbuild(MT *mt,int argc,char **argv) ;
 extern void vqlistbuild(MT *mt,...) ;
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__unix__)
 #define stricmp strcasecmp
 #endif
 
