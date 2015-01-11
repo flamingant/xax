@@ -50,6 +50,7 @@ static struct {
     RCONS	*uf_poll ;
     RCONS	*uf_reg ;
     int		quit ;
+    int		init ;
     struct {
 	struct timeval tv ;
 	int	min_open ;
@@ -440,7 +441,9 @@ extern u32 uf_send_and_notify(UF *uf,int m,u32 a)
 
 extern UF *uf_create(UFF f,void *d,void *cp)
 {
-    UF *uf = uf_alloc() ;
+    UF *uf ;
+    ufs_init(0,0) ;
+    uf = uf_alloc() ;
     uf->f = f ;
     uf->d.v = d ;
     uf->state = 0 ;
@@ -577,7 +580,7 @@ static void ufs_select_scan(fd_set *set,int type)
 	}
     }
 
-static void ufs_select(void)
+extern void ufs_select(void)
 {
     int s ;
     fd_set	*rfd = 0 ;
@@ -640,6 +643,7 @@ extern void ufs_loop(void)
 
 extern int ufs_init(int argc,char **argv)
 {
+    if (ufs.init == -1) return 0 ;
     ufs.max_poll = 16 ;
     ufs.sel.min_open = NOFILE+1 ;
     ufs.sel.max_open = -1 ;
@@ -652,6 +656,7 @@ extern int ufs_init(int argc,char **argv)
     ufs.ufq_ray->rat->unit_size = sizeof(UFQ) ;
     ufs.ufq_ray->rat->units_per_node = 128 ;
     ray_init(ufs.ufq_ray) ;
+    ufs.init = -1 ;
     return(argc) ;
     }
 
@@ -666,6 +671,7 @@ extern void ufs_destroy(void)
     freenz(ufs.sel.wfd) ;
     freenz(ufs.sel.uf) ;
     ray_destroy(ufs.ufq_ray) ;
+    ufs.init = 0 ;
     }
 
 extern void ufs_quit(void)
