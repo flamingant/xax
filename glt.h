@@ -24,6 +24,8 @@ typedef struct {
 
 typedef int (*GLTCMP)(GLT_CAR_T,GLT_CDR_T) ;
 
+extern int glt_count(GLT *t) ;
+
 extern GLT *glassq(GLT *t,GLT_CAR_T v) ;
 extern GLT *glrassq(GLT *t,GLT_CDR_T v) ;
 

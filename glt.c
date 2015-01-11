@@ -4,6 +4,15 @@ extern "C" {
 
 #include	"glt.h"
 
+extern int glt_count(GLT *t)
+{
+    int		n ;
+    if (!t) return 0 ;
+    for (n = 0 ; t->car || t->cdr ; t++)
+	n++ ;
+    return n ;
+    }
+
 extern GLT *glassq(GLT *t,GLT_CAR_T v)
 {
     if (!t) return 0 ;
