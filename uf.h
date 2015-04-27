@@ -5,6 +5,8 @@ extern "C" {
 #ifndef __uf_h
 #define __uf_h
 
+#define __UFFREG__
+
 #ifndef __type_h
 #include	<pu/type.h>
 #endif
