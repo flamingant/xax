@@ -74,6 +74,19 @@ extern u32 uf_send_direct(UF *uf,int m,u32 a)
 #define UF_SEND_RAW(u,m,a)	((u)->f((u),m,a))
 
 /* ================================================================ */
+extern UFF **GSV_UFF_start(void)
+{
+    extern UFF *__start_GSV_UFF[] ;
+    return __start_GSV_UFF ;
+    }
+
+extern UFF **GSV_UFF_end(void)
+{
+    extern UFF *__stop_GSV_UFF[] ;
+    return __stop_GSV_UFF ;
+    }
+
+/* ================================================================ */
 extern int ufm_offset(UFM m)
 {
     if (m < UFM__STD_AFTERLAST)
