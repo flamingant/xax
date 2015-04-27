@@ -6,6 +6,7 @@ extern "C" {
 #define __uf_h
 
 #define __UFFREG__
+#define __UFCREG__
 
 #ifndef __type_h
 #include	<pu/type.h>
@@ -81,6 +82,8 @@ typedef enum __enum_UFM {
 
 #define UFS_DESTROY	0x0001
 
+typedef struct __struct_UFC UFC ;	/* class */
+
 typedef struct {
     u8		all ;
     u8		none ;
@@ -98,6 +101,7 @@ struct __struct_UFQ {
 struct __struct_UF {
     UFF		f ;
     UFD		d ;
+    UFC		*c ;
     int		state ;
     UF		*parent ;
     UF_TRACE	trace ;
@@ -107,6 +111,12 @@ struct __struct_UF {
 	} queue ;
     } ;
 
+struct __struct_UFC {
+    char	*name ;
+    UFF		f ;
+    UF_TRACE	trace ;
+    } ;
+	
 typedef struct {
     UF		*uf ;
     int	       	m ;
