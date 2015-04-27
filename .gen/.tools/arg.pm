@@ -156,7 +156,8 @@ sub argset_c {
 	$I{omf},
 } ;\n
 
-GSV_ARGSET_ADD(argset_$I{name}) ;
+/* collect now does this */
+/* GSV_ARGSET_ADD(argset_$I{name}) ; */
 " ;
     push @$o,"\n/* ================================================================ */\n" ;
     (@$os,@$o) ;
