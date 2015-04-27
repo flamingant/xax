@@ -107,6 +107,12 @@ static LOGSEC *ls_lookup_partial(char *name,char *prefix)
 
 #include	".gen/log.h"
 
+extern void log_filename_set(char *name)
+{
+    log_g.flags = (log_g.flags & ~(LF_STDOUT | LF_STDERR)) ;
+    log_g.filename = name ;
+    }
+
 /* ~~arg(help => "Log to standard output (stdout)",type => "bool")~~ */
 static int argf__log_stdout(char *name,char *value,void *a0)
 {
@@ -124,8 +130,7 @@ static int argf__log_stderr(char *name,char *value,void *a0)
 /* ~~arg(help => "Log to named file",value => "FILE")~~ */
 static int argf__log_file(char *name,char *value,void *a0)
 {
-    log_g.flags = (log_g.flags & ~(LF_STDOUT | LF_STDERR)) ;
-    log_g.filename = strdup(value) ;
+    log_filename_set(strdup(value)) ;
     return(ASF_ARGACCEPTED) ;
 }
 
@@ -139,7 +144,7 @@ static int argf__log_tee_file(char *name,char *value,void *a0)
 /* ~~arg(help => "Log to timestamp named file",type => 'bool')~~ */
 static int argf__log_file_auto(char *name,char *value,void *a0)
 {
-    log_g.filename = timestamp_filename(0,".log") ;
+    log_filename_set(timestamp_filename(0,".log")) ;
     return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
 }
 
