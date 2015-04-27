@@ -44,12 +44,15 @@ sub gen_add_g {
 }
 
 sub gen_flush {
-    for $s (keys %$gen) {
+    for $s (sort keys %$gen) {
 	my $c = join("",@{$gen->{$s}}) ;
-	my $f = ".gen/$stem.$s" ;
+	my $ss = $s ;
+	$ss =~ s!:.*!! ;
+	my $f = ".gen/$stem.$ss" ;
 #	dp 0,"$f\n" ;
 	if ($c || -f $f) {
-	    open O,">$f" or die "cannot open '$f'" ;
+	    unlink $f if $ss eq $s ;
+	    open O,">>$f" or die "cannot open '$f'" ;
 	    print O $c ;
 	    close O ;
 	}
@@ -93,7 +96,7 @@ sub gen_one {
 	$expr = $1 ;
         $expr =~ m!^{! and $expr = "do $expr" ;
 	eval $expr ;
-	print "{$expr} -> $@\n" if $@ ;
+	print "$expr -> $@\n" if $@ ;
     }
     my $mod ;
 #    for $mod (@modules) { quickdump eval "\$$mod" . "::module" ; }
@@ -110,11 +113,12 @@ sub gen_one {
 
 sub get_source {
     my $t ;
-    for (qw(h c cpp)) {
+    for (qw(h)) {
 	if (-f "$stem.$_") {
 	    $t .= file_contents("$stem.$_",1) ;
 	}
     }
+    $t .= file_contents($file,1) ;
     $t ;
 }
 
