@@ -22,6 +22,8 @@ sub register {
     my $extra = shift ;
     $extra ||= "{}" ;
     main::gen_add_g "gen_collect('$set','$symbol',$extra) ;\n" ;
+    my $gsv = sprintf 'void *gsv_%s_%s __attribute__ ((section ("GSV_%s"))) = %s ;',$set,$symbol,uc($set),$symbol ;
+    main::gen_add "c:9","$gsv\n" ;
 }
 
 sub register_all {

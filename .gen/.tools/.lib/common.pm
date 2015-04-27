@@ -1,10 +1,8 @@
-
-
 package common ;
 
 use Exporter ;
 @ISA = ('Exporter') ;
-@EXPORT = qw(trim sprin quickdump cfparse dump_items) ;
+@EXPORT = qw(trim sprin quickdump cfparse dump_items cstruct_parse) ;
 @EXPORT = (@EXPORT,qw(hyphenate unhyphenate)) ;
 @EXPORT = (@EXPORT,qw(hslice)) ;
 @EXPORT = (@EXPORT,qw(lparse lprops)) ;
@@ -32,7 +30,7 @@ sub lprops {
     }
     $p ;
 }
-    
+
 ################################################################
 sub hslice ($@) {
     my $h = shift ;
@@ -80,12 +78,51 @@ sub quickdump {
 }
 
 ################################################################
-use Text::Balanced(qw(extract_bracketed 
+use Text::Balanced(qw(extract_bracketed
 		      extract_codeblock
 		      extract_delimited
 		      extract_multiple
 		      extract_variable
 )) ;
+
+sub cstruct_parse {
+    my $r = {} ;
+    my $s = shift ;
+
+
+    $s =~ s!/\*.*?\*/!!s ;
+    $s =~ s!^.*?(?=\{)!!s ;
+    $r->{pre} = $& ;
+    ($r->{body},$s) = extract_bracketed($s,'{}') ;
+    $s =~ s!;.*!;!s ;
+    $r->{post} = $s ;
+
+    $r->{body} =~ s!{\s*!!s ;
+
+    $r->{fieldlines} = [split(m!\s*;\s*!,$r->{body})] ;
+
+    pop @{$r->{fieldlines}} ;
+
+    map {s!(\s*)(\*+)\s*!$2$1! ; tr!*!p! ; } @{$r->{fieldlines}} ;
+    $r->{fields} = [map {[split]} @{$r->{fieldlines}}] ;
+
+    if ($r->{pre} =~ m!struct\s*(\w+)!) {
+	$r->{tag} = $1 ;
+	$r->{name} = $& ;
+	$r->{aname} = $1 ;
+	$r->{aname} =~ s!_*struct_*!! ;
+    }
+
+    if ($r->{pre} =~ m!typedef!) {
+	if ($r->{post} =~ m!\w+!) {
+	    $r->{name} = $& ;
+	    $r->{aname} = $& ;
+	}
+    }
+
+    $r ;
+}
+
 
 sub cfparse {
     my $s = shift ;

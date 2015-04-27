@@ -83,8 +83,8 @@ sub sym_c_to_lisp ($) {
 
 sub unadorn ($) {
     my $s = shift ;
-    $s =~ s!^[FQVKS]*!! ;
-    $s =~ s![FQVKS]*$!! ;
+    if ($s =~ s![FQVKS]+$!!) {} 	# trailing
+    elsif ($s =~ s!^(QV|QF|[FQVKS])!!) {} # leading
     $s ;
 }
 
@@ -126,15 +126,65 @@ $tomem = [
     ["this",	"lo"],
     ] ;
 
+sub T_lp_hout {
+    my $m = shift ;
+    my $tname = $m->{tname} ;
+    my $pname = $m->{pname} ;
+    my $tt = <<'_' ;
+#ifndef !!_object_pM
+
+extern LTD !!_ltd[] ;
+
+extern lo !!__signal_wrong_type(lo o) ;
+
+#define !!_lps(o)	    ((lo_!! *) (o)->d.p)
+
+extern void !!_assertF(lo) ;
+extern !p! *!!_lpaF(lo) ;
+extern !p! *!!_lpzF(lo) ;
+
+#define !!_object_pM(o) (LTEQ(o,!!_ltd))
+#define !!_assertM(o)  (assert_object_ltd(o,!!_ltd))
+#define !!_lpaM(o)     ((lo_!! *) lpat(o,!!_ltd))
+#define !!_lpzM(o)     ((lo_!! *) lpzt(o,!!_ltd))
+
+#if 0
+#define !!_object_p(o) !!_object_pF(o) 
+#define !!_assert(o)  !!_assertF(o)
+#define !!_lpa(o)     !!_lpaF(o)
+#define !!_lpz(o)     !!_lpzF(o)
+#else
+#define !!_object_p(o) !!_object_pM(o) 
+#define !!_assert(o)  !!_assertM(o)
+#define !!_lpa(o)     !!_lpaM(o)
+#define !!_lpz(o)     !!_lpzM(o)
+#endif
+
+#endif
+_
+
+    $tt =~ s/!!/$tname/g ;
+    $tt =~ s/!p!/$pname/g ;
+    $tt ;
+}
+
 sub one_T {
     my $t = shift ;
     my $props = shift ;
     my $m = {} ;
     my $f ;
 
+    $m->{tname} = $t ;
+    $m->{pname} = "lo_$t" ;
+
     $m->{tag} = '-' ;
     if ($props =~ s!\(tag\s*\\*(.)!!) {$m->{tag} = $1 ;}
+    while ($props =~ s!\((nolp|pname)\s*(.*?)\)!!) {
+	$m->{$1} = $2 || 1 ;
+#	print "$1 $m->{$1}\n" ;
+    }
 
+    push @$f,"LTD_MAGIC" ;
     push @$f,"\"$t\",\'$m->{tag}\'" ;
 
     for (qw(gcpro destroy nopointer link number integer symbol string)) {
@@ -186,6 +236,10 @@ sub one_T {
     push @$o,"    }} ;\n\n" ;
     push @{$items->{cout}},@$o ;
     push @{$items->{ltd}},$t ;
+
+    if (!defined $m->{nolp}) {
+	push @{$items->{hout}},T_lp_hout($m) ;
+    }
 }
 
 sub find_T {
@@ -301,6 +355,7 @@ sub find_x {
 sub out_x {
     my $it = shift ;
     my $name = shift ;
+    my $osh ;
     my $os ;
     my $o ;
 
@@ -308,12 +363,14 @@ sub out_x {
 	push @$o,"static struct sym_init ${name}_mod[] = {\n" ;
 	for $item (@$it) {
 	    push @$o,"    {&$I{name},$Q{lname}},\n" ;
+	    push @$osh,"extern lo $item->{name} ;\n" ;
 	    if ($item->{undeclared}) {
 		push @$os,"lo $item->{name} ;\n" ;
 	    }
 	}
 	push @$o,"    {0}} ;\n" ;
     }
+    push @{$items->{hout}},@$osh,"\n" ;
     push @{$items->{cout}},@$os,"\n" ;
     push @{$items->{cout}},@$o,"\n\n" ;
 }
@@ -346,11 +403,25 @@ sub out_S {
 }
 
 ################################################################
+sub find_X {
+    local $_ = $gtext ;
+    while (m!/\*\(X\s*(.*?)\)\s*\*/!g) {
+	my $s = eval $1 ;
+	push @{$items->{X}},"\n$s\n" ;
+    }
+    push @{$items->{hout}},@{$items->{X}} ;
+}
+
+sub out_X {
+}
+
+################################################################
 sub one_V {
-    my ($name,$props) = @_ ;
+    my ($storage,$name,$props) = @_ ;
     my $rp = lprops $props ;
     if ($rp->{init}) {$rp->{init} = eval $rp->{init};}
     my $i = {
+	storage => $storage,
 	vname => $name,
 	name => "Q$name",
 	lname => unadorn sym_c_to_lisp $name,
@@ -362,14 +433,27 @@ sub one_V {
     push @{$items->{var}},$i ;
 }
 
+sub out_V {
+    for $item (@{$items->{var}}) {
+	next if $item->{storage} eq 'static' ;
+	push @{$items->{hout}},"extern lo $item->{vname} ;\n" ;
+    }
+}
+
 sub find_V {
     my $os ;
     my $o ;
     local $_ = $gtext ;
     my $name ;
-    while (m!lo\s+(\w+).*?/\*\(V\s*(.*?)\)\s*\*/!g) {
-#	print " ==== $& ====\n" ;
-	one_V $1,$2 ;
+    while (m!(static|)\s*lo\s+(\w+).*?/\*\(V\s*(.*?)\)\s*\*/!g) {
+	one_V $1,$2,$3 ;
+    }
+}
+
+################################################################ 
+sub out_M {
+    for (@{$items->{moddep}}) {
+	push @{$items->{cout}},"extern LMOD mod_$_\[] ;\n" ;
     }
 }
 
@@ -412,6 +496,16 @@ sub mod_varinit {
 	) ;
 }
 
+sub mod_add {
+    my @o ;
+    push @o,
+    "    case MOD_ADD:\n",
+    (map {"\tlisp_mod_add(mod_$_) ;\n"} @{$items->{moddep}}),
+    "\tbreak ;\n" ;
+    join("",@o) ;
+}
+
+
 sub out_mimf {
     my $o ;
     local $item = {
@@ -419,31 +513,25 @@ sub out_mimf {
 	sub_mod => @{$items->{lsub}} ? "sub_mod" : "0",
     } ;
     my $t = <<'_' ;
-static int mod_mimf(int level)
+
+static int mod_mimf(LMOD *mod,int level,u32 a)
 {
     int r = 0 ;
-!!$info->{hasmimf} ? "    r |= __mimf(level) ;\n" : ""!!
+!!$info->{premimf} ? "    r |= $info->{premimf}(level) ;\n" : ""!!
     switch(level) {
+!!mod_add!!
 !!mod_toinit!!
 !!mod_subinit!!
 !!mod_syminit!!
 !!mod_varinit!!
     }
+!!$info->{postmimf} ? "    r |= $info->{postmimf}(level) ;\n" : ""!!
     return(r) ;
     }
 
-struct mod mod_!!$stem!![] = {{"!!$stem!!",mod_mimf,!!"$I{sym_mod}"!!,!!"$I{sub_mod}"!!}} ;
+LMOD mod_!!$stem!![] = {{"!!$stem!!",mod_mimf,!!"$I{sym_mod}"!!,!!"$I{sub_mod}"!!}} ;
 
-static int morsel_fun(int i,void *a)
-{
-    switch(i) {
-    case MOM_LISPSTART: lisp_mod_add(mod_!!$stem!!) ; break ;
-}
-    return(0) ;
-}
-
-MORSEL morsel_!!$stem!![] = {morsel_fun} ;
-
+GSV_LMOD_ADD(mod_!!$stem!!) ;
 _
 ## ~~~~~~~~~~~~~~~~
     push @$o,iexpand $t ;
@@ -455,12 +543,14 @@ _
 sub start {
     if ($text !~ m!cg-start!) { return ;}
     $info->{islisp} = 1 ;
-    collect::register('lispmod',"morsel_$stem") ;
+
     $text =~ m!/\*\(cg-end\).*!s ;
     $gtext = $` ;
 
-    if ($gtext =~ m!\b__mimf!) {$info->{hasmimf} = 1 ;}
+    if ($gtext =~ m!\b(__mimf|pre_mimf)!) {$info->{premimf} = $1 ;}
+    if ($gtext =~ m!\b(post__mimf)!) {$info->{postmimf} = $1 ;}
 
+    find_X ;
     find_T ;
     find_F ;
     find_Q ;
@@ -468,10 +558,15 @@ sub start {
     find_K ;
     find_S ;
 
+    push @{$items->{moddep}},$stem ;
+
+    out_X ;
     out_F ;
     out_Q ;
+    out_V ;
     out_K ;
     out_S ;
+    out_M ;
 
     out_mimf ;
 
