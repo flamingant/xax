@@ -44,6 +44,9 @@ extern u32 mmf_null(MMO *o,int m,u32 a) ;
 #define mmo_getname(m) ((char *) (m)->f(m,MMM_GET_NAME,0))
 #define mmo_getdesc(m) ((char *) (m)->f(m,MMM_GET_DESC,0))
 
+#define GSV_MMO_ADD(x) \
+    MMO *gsv_ ## x __attribute__ ((section ("GSV_MMO"))) = { x } ;
+
 #ifdef __cplusplus
 }
 #endif
