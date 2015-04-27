@@ -74,15 +74,15 @@ extern u32 uf_send_direct(UF *uf,int m,u32 a)
 #define UF_SEND_RAW(u,m,a)	((u)->f((u),m,a))
 
 /* ================================================================ */
-extern UFF **GSV_UFF_start(void)
+extern UFF *GSV_UFF_start(void)
 {
-    extern UFF *__start_GSV_UFF[] ;
+    extern UFF __start_GSV_UFF[] ;
     return __start_GSV_UFF ;
     }
 
-extern UFF **GSV_UFF_end(void)
+extern UFF *GSV_UFF_end(void)
 {
-    extern UFF *__stop_GSV_UFF[] ;
+    extern UFF __stop_GSV_UFF[] ;
     return __stop_GSV_UFF ;
     }
 
@@ -224,13 +224,12 @@ extern int ufss_trace_arg_try(UFSS *ss,char *s,int cmd)
     return(1) ;
     }
 
-extern UFF uff_initvec[] ;
-
 extern UFSS *ufss_lookup(char *name)
 {
-    int		i ;
-    for (i = 0 ; uff_initvec[i] ; i++) {
-	UFF f = uff_initvec[i] ;
+    UFF *s = GSV_UFF_start() ;
+    UFF *e = GSV_UFF_end() ;
+    while (s < e) {
+	UFF f = *s++ ;
 	UFSS *ss = (UFSS *) f(uf_dummy,UFM_GET_STATIC,0) ;
 	if (ss && !stricmp(ss->name,name)) return ss ;
 	}
