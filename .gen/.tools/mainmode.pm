@@ -85,7 +85,11 @@ sub gen_c {
     $Q{desc},
     $I{default_mmo},
     $I{enabled},
-\n}} ;\n\n" ;
+\n}} ;
+
+GSV_MMO_ADD(mmo_$I{name}) ;
+
+" ;
     }
     push @$o,"/* mainmode } */\n" ;
     @$o ;
