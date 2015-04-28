@@ -76,6 +76,8 @@ extern u32 uf_send_direct(UF *uf,int m,u32 a)
 UF uf_dummy[] = {null_uff,0}  ;
 
 /* ================================================================ */
+#include	<pu/iterator.h>
+
 extern UFC **GSV_UFC_start(void)
 {
     extern UFC *__start_GSV_UFC[] ;
@@ -86,6 +88,13 @@ extern UFC **GSV_UFC_end(void)
 {
     extern UFC *__stop_GSV_UFC[] ;
     return __stop_GSV_UFC ;
+    }
+
+extern void UFC_ITC_init(SVEC_ITC *itc)
+{
+    itc->s = (void **) GSV_UFC_start() ;
+    itc->e = (void **) GSV_UFC_end() ;
+    itc->c = itc->s ;
     }
 
 extern UFC *ufc_lookup(char *name)
@@ -99,6 +108,26 @@ extern UFC *ufc_lookup(char *name)
     return 0 ;
     }
 
+extern void ufc_map(void (*fun)(UFC *,void *),void *a)
+{
+    SVEC_ITC itc[1] ;
+    UFC_ITC_init(itc) ;
+    while (itc->c < itc->e) {
+	fun((UFC *) *(itc->c++),a) ;
+	}
+    }
+   
+extern UFC *ufc_scan(UFC *(*fun)(UFC *,void *),void *a)
+{
+    SVEC_ITC itc[1] ;
+    UFC_ITC_init(itc) ;
+    while (itc->c < itc->e) {
+	UFC	*r ;
+	if ((r = fun((UFC *) *(itc->c++),a)) != 0) return r ;
+	}
+    return 0 ;
+    }
+   
 /* ================================================================ */
 extern UFF *GSV_UFF_start(void)
 {
