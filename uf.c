@@ -73,6 +73,32 @@ extern u32 uf_send_direct(UF *uf,int m,u32 a)
 
 #define UF_SEND_RAW(u,m,a)	((u)->f((u),m,a))
 
+UF uf_dummy[] = {null_uff,0}  ;
+
+/* ================================================================ */
+extern UFC **GSV_UFC_start(void)
+{
+    extern UFC *__start_GSV_UFC[] ;
+    return __start_GSV_UFC ;
+    }
+
+extern UFC **GSV_UFC_end(void)
+{
+    extern UFC *__stop_GSV_UFC[] ;
+    return __stop_GSV_UFC ;
+    }
+
+extern UFC *ufc_lookup(char *name)
+{
+    UFC **s = GSV_UFC_start() ;
+    UFC **e = GSV_UFC_end() ;
+    while (s < e) {
+	UFC *c = *s++ ;
+	if (c && c->name && !stricmp(c->name,name)) return c ;
+	}
+    return 0 ;
+    }
+
 /* ================================================================ */
 extern UFF *GSV_UFF_start(void)
 {
@@ -84,6 +110,18 @@ extern UFF *GSV_UFF_end(void)
 {
     extern UFF __stop_GSV_UFF[] ;
     return __stop_GSV_UFF ;
+    }
+
+extern UFSS *ufss_lookup(char *name)
+{
+    UFF *s = GSV_UFF_start() ;
+    UFF *e = GSV_UFF_end() ;
+    while (s < e) {
+	UFF f = *s++ ;
+	UFSS *ss = (UFSS *) f(uf_dummy,UFM_GET_STATIC,0) ;
+	if (ss && !stricmp(ss->name,name)) return ss ;
+	}
+    return 0 ;
     }
 
 /* ================================================================ */
@@ -191,29 +229,27 @@ extern u32 null_uff(UF *f,int m,u32 a)
 	}
     }
 
-UF uf_dummy[] = {null_uff,0}  ;
-
-extern int ufss_trace_arg_try(UFSS *ss,char *s,int cmd)
+extern int uf_trace_arg_try(UF_TRACE *trace,char *s,int cmd)
 {
     char	*msgname = s ;
     u8		*p ;
 
     if (!strcmp(msgname,"all"))
-	p = &ss->trace.all ;
+	p = &trace->all ;
     else if (!strcmp(msgname,"none"))
-	p = &ss->trace.none ;
+	p = &trace->none ;
     else if (!strcmp(msgname,"basic")) {
-	ufss_trace_arg_try(ss,"UFM_CREATE",cmd) ;
-	ufss_trace_arg_try(ss,"UFM_DESTROY",cmd) ;
-	ufss_trace_arg_try(ss,"UFM_SELECT_OK",cmd) ;
-	ufss_trace_arg_try(ss,"UFM_DISCONNECT_IND",cmd) ;
+	uf_trace_arg_try(trace,"UFM_CREATE",cmd) ;
+	uf_trace_arg_try(trace,"UFM_DESTROY",cmd) ;
+	uf_trace_arg_try(trace,"UFM_SELECT_OK",cmd) ;
+	uf_trace_arg_try(trace,"UFM_DISCONNECT_IND",cmd) ;
 	return(1) ;
 	}
     else {
 	GLT	*glt ;
 	glt = glrassoc(glt_enum_UFM,(GLT_CDR_T) msgname,(GLTCMP) strcmp) ;
 	if (!glt) return(0) ;
-	p = ss->trace.ufm + ufm_offset((UFM) (int) glt->car) ;
+	p = trace->ufm + ufm_offset((UFM) (int) glt->car) ;
 	}
 
     switch(cmd) {
@@ -224,36 +260,24 @@ extern int ufss_trace_arg_try(UFSS *ss,char *s,int cmd)
     return(1) ;
     }
 
-extern UFSS *ufss_lookup(char *name)
-{
-    UFF *s = GSV_UFF_start() ;
-    UFF *e = GSV_UFF_end() ;
-    while (s < e) {
-	UFF f = *s++ ;
-	UFSS *ss = (UFSS *) f(uf_dummy,UFM_GET_STATIC,0) ;
-	if (ss && !stricmp(ss->name,name)) return ss ;
-	}
-    return 0 ;
-    }
-
 #include	"gmalloc.h"
 
 extern int trace_arg_try(char *s,int cmd)
 {
-    UFSS	*ss = null_ufss ;
+    UFC		*c ;
     char	*at ;
     if (at = (strchr(s,'@'))) {
 	GMC *m = mt_malloc_open(64) ;
-	char *ssn = gstrdup(m,s) ;
-	char *z = ssn + (at - s) ;
+	char *ufcname = gstrdup(m,s) ;
+	char *z = ufcname + (at - s) ;
 	*z = 0 ;
-	if (!(ss = ufss_lookup(ssn))) {
-	    errorfatal("unknown UFMSID (%s)\n",ssn) ;
+	if (!(c = ufc_lookup(ufcname))) {
+	    errorfatal("unknown UFMSID (%s)\n",ufcname) ;
 	    }
 	gmalloc_close(m) ;
 	s = at+1 ;
 	}
-    return(ufss_trace_arg_try(ss,s,cmd)) ;
+    return(uf_trace_arg_try(&c->trace,s,cmd)) ;
     }
 
 /* ================================================================ */
