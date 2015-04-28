@@ -359,6 +359,21 @@ static int argf__xortrace(char *name,char *value,void *a0)
 }
 
 /* ================================================================ */
+static void argf__ufc_list_(UFC *ufc,void *a0)
+{
+    printf("%s",ufc->name) ;
+    printf("\n") ;
+}
+
+/* ~~arg(help => "List all registered UFC",type => "bool")~~ */
+static int argf__ufc_list(char *name,char *value,void *a0)
+{
+    ufc_map(argf__ufc_list_,0) ;
+    fflush(stdout) ;
+    return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
+}
+
+/* ================================================================ */
 static int ufs_long_arg_fun(char *name,char *value,void *a0)
 {
     return(argitem_try(args_uf,name,value,a0)) ;
