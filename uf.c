@@ -229,6 +229,8 @@ extern u32 null_uff(UF *f,int m,u32 a)
 	}
     }
 
+UFC base_ufc[] = {"*base*",null_uff} ;
+
 extern int uf_trace_arg_try(UF_TRACE *trace,char *s,int cmd)
 {
     char	*msgname = s ;
@@ -264,7 +266,7 @@ extern int uf_trace_arg_try(UF_TRACE *trace,char *s,int cmd)
 
 extern int trace_arg_try(char *s,int cmd)
 {
-    UFC		*c ;
+    UFC		*c = base_ufc ;
     char	*at ;
     if (at = (strchr(s,'@'))) {
 	GMC *m = mt_malloc_open(64) ;

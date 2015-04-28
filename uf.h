@@ -139,6 +139,8 @@ extern u32 uf_parent_notify(UF *uf,int nm,int m,u32 a) ;
 
 extern u32 null_uff(UF *f,int m,u32 a) ;
 
+extern UFC base_ufc[] ;
+
 extern void uf_socket_unregister(UF *uf,int fd) ;
 
 extern void ufs_cycle(void) ;
