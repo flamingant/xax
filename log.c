@@ -38,6 +38,52 @@ LOG_G log_g = {
     "%H%M%S",
 } ;
 
+/* ================================================================ */
+typedef struct {
+    LOGSEC **s ;
+    LOGSEC **e ;
+    LOGSEC **c ;
+    LOGSEC *ls ;
+    } LOGSEC_ITC ;
+
+extern LOGSEC **GSV_LOGSEC_start(void)
+{
+    extern LOGSEC *__start_GSV_LOGSEC[] ;
+    return __start_GSV_LOGSEC ;
+    }
+
+extern LOGSEC **GSV_LOGSEC_end(void)
+{
+    extern LOGSEC *__stop_GSV_LOGSEC[] ;
+    return __stop_GSV_LOGSEC ;
+    }
+
+extern void LOGSEC_ITC_init(LOGSEC_ITC *itc)
+{
+    itc->s = GSV_LOGSEC_start() ;
+    itc->e = GSV_LOGSEC_end() ;
+    itc->c = itc->s ;
+    }
+
+static LOGSEC *ls_lookup(char *name)
+{
+    LOGSEC **s = GSV_LOGSEC_start() ;
+    LOGSEC **e = GSV_LOGSEC_end() ;
+    LOGSEC **ls ;
+    for (ls = s ; ls < e ; ls++)
+	if (!stricmp((*ls)->name,name)) return *ls ;
+    return 0 ;
+    }
+
+static LOGSEC *ls_lookup_partial(char *name,char *prefix)
+{
+    int		n = strlen(prefix) ;
+    if (!strncmp(name,prefix,n)) return(ls_lookup(name+n)) ;
+    return(0) ;
+    }
+
+/* ================================================================ */
+
 extern void log_prefix_set(int n)
 {
     log_g.flags &= ~(LF_TIMESTAMP | LF_SEQUENCE) ;
@@ -81,23 +127,6 @@ static char *timestamp_filename(char *tsf,char *suffix)
     mtput_timestamp(mt,0) ;
     mtputs(mt,suffix) ;
     return  mt->s ;
-    }
-
-extern LOGSEC *logsec_initvec[] ;
-
-static LOGSEC *ls_lookup(char *name)
-{
-    LOGSEC **ls ;
-    for (ls = logsec_initvec ; *ls ; ls++)
-	if (!stricmp((*ls)->name,name)) return *ls ;
-    return 0 ;
-    }
-
-static LOGSEC *ls_lookup_partial(char *name,char *prefix)
-{
-    int		n = strlen(prefix) ;
-    if (!strncmp(name,prefix,n)) return(ls_lookup(name+n)) ;
-    return(0) ;
     }
 
 /* ================================================================ */
@@ -184,11 +213,11 @@ static int argf__log_prefix_sequence(char *name,char *value,void *a0)
 /* ~~arg(help => "List all logging sections",type => "bool")~~ */
 static int argf__log_section_list(char *name,char *value,void *a0)
 {
+    LOGSEC_ITC	itc[1] ;
     int		vcf = switch_state_read(value) ;
-    LOGSEC **ls ;
     if (vcf == VCF_SWITCH_OFF) goto done ; 
-    for (ls = logsec_initvec ; *ls ; ls++) {
-	LOGSEC *s = *ls ;
+    for (LOGSEC_ITC_init(itc) ; itc->c < itc->e ; itc->c++) {
+	LOGSEC *s = *itc->c ;
 	printf("%-16s %1s %s\n",s->name,
 	       s->enable ? "+" : " ",
 	       s->description ? s->description : "") ;
@@ -200,13 +229,14 @@ done :
 /* ~~arg(help => "All logging sections switch on/off",type => "bool")~~ */
 static int argf__log_section_all(char *name,char *value,void *a0)
 {
+    LOGSEC_ITC	itc[1] ;
     int		vcf = switch_state_read(value) ;
-    LOGSEC **ls ;
-    for (ls = logsec_initvec ; *ls ; ls++) {
+    for (LOGSEC_ITC_init(itc) ; itc->c < itc->e ; itc->c++) {
+	LOGSEC *s = *itc->c ;
 	switch (vcf) {
-	case VCF_SWITCH_ON:	(*ls)->enable = 1 ; break ;
-	case VCF_SWITCH_OFF:	(*ls)->enable = 0 ; break ;
-	case VCF_SWITCH_TOGGLE:	(*ls)->enable ^= 1 ; break ;
+	case VCF_SWITCH_ON:	s->enable = 1 ; break ;
+	case VCF_SWITCH_OFF:	s->enable = 0 ; break ;
+	case VCF_SWITCH_TOGGLE:	s->enable ^= 1 ; break ;
 	}
 	}
     return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
