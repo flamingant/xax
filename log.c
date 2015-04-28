@@ -218,8 +218,9 @@ static int argf__log_section_list(char *name,char *value,void *a0)
     if (vcf == VCF_SWITCH_OFF) goto done ; 
     for (LOGSEC_ITC_init(itc) ; itc->c < itc->e ; itc->c++) {
 	LOGSEC *s = *itc->c ;
-	printf("%-16s %1s %s\n",s->name,
+	printf("%1s %-16s %s\n",
 	       s->enable ? "+" : " ",
+	       s->name,
 	       s->description ? s->description : "") ;
 	}
     fflush(stdout) ;
