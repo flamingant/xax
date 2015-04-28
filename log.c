@@ -39,12 +39,7 @@ LOG_G log_g = {
 } ;
 
 /* ================================================================ */
-typedef struct {
-    LOGSEC **s ;
-    LOGSEC **e ;
-    LOGSEC **c ;
-    LOGSEC *ls ;
-    } LOGSEC_ITC ;
+#include	<pu/iterator.h>
 
 extern LOGSEC **GSV_LOGSEC_start(void)
 {
@@ -58,10 +53,10 @@ extern LOGSEC **GSV_LOGSEC_end(void)
     return __stop_GSV_LOGSEC ;
     }
 
-extern void LOGSEC_ITC_init(LOGSEC_ITC *itc)
+extern void SVEC_ITC_init(SVEC_ITC *itc)
 {
-    itc->s = GSV_LOGSEC_start() ;
-    itc->e = GSV_LOGSEC_end() ;
+    itc->s = (void **) GSV_LOGSEC_start() ;
+    itc->e = (void **) GSV_LOGSEC_end() ;
     itc->c = itc->s ;
     }
 
@@ -213,10 +208,10 @@ static int argf__log_prefix_sequence(char *name,char *value,void *a0)
 /* ~~arg(help => "List all logging sections",type => "bool")~~ */
 static int argf__log_section_list(char *name,char *value,void *a0)
 {
-    LOGSEC_ITC	itc[1] ;
+    SVEC_ITC	itc[1] ;
     int		vcf = switch_state_read(value) ;
     if (vcf == VCF_SWITCH_OFF) goto done ; 
-    for (LOGSEC_ITC_init(itc) ; itc->c < itc->e ; itc->c++) {
+    for (SVEC_ITC_init(itc) ; itc->c < itc->e ; itc->c++) {
 	LOGSEC *s = *itc->c ;
 	printf("%1s %-16s %s\n",
 	       s->enable ? "+" : " ",
@@ -231,9 +226,9 @@ done :
 /* ~~arg(help => "All logging sections switch on/off",type => "bool")~~ */
 static int argf__log_section_all(char *name,char *value,void *a0)
 {
-    LOGSEC_ITC	itc[1] ;
+    SVEC_ITC	itc[1] ;
     int		vcf = switch_state_read(value) ;
-    for (LOGSEC_ITC_init(itc) ; itc->c < itc->e ; itc->c++) {
+    for (SVEC_ITC_init(itc) ; itc->c < itc->e ; itc->c++) {
 	LOGSEC *s = *itc->c ;
 	switch (vcf) {
 	case VCF_SWITCH_ON:	s->enable = 1 ; break ;
