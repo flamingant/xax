@@ -381,7 +381,7 @@ static void log_line_start(LOGSEC *ls)
 	log_timestamp(ls) ;
     if (log_g.flags & LF_SEQUENCE)
 	log_printf_c(ls,"%05d:",log_g.sequence++) ;
-    if (ls->name)
+    if (!ls->nonameprint && ls->name)
 	log_printf_c(ls,"%s:",ls->name) ;
     }
 

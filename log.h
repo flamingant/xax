@@ -16,6 +16,7 @@ typedef struct {
     char	*name ;
     int		enable ;
     char	*description ;
+    int		nonameprint ;
     } LOGSEC ;
 
 #define LF_STDOUT		1

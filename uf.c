@@ -340,7 +340,7 @@ static int ufs_long_arg_fun(char *name,char *value,void *a0)
 
 /* ~# use collect ; collect::register_all('logsec','^LOGSEC (\w+)','$1') ; #~ */
 
-LOGSEC lc_uf[] = {"UF",1} ;
+LOGSEC lc_uf[] = {"UF",1,"UF messages",1} ;
 
 static void uf_diag(MT *mto,UF *uf,char *format)
 {
