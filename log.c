@@ -222,6 +222,7 @@ static int argf__log_section_list(char *name,char *value,void *a0)
 	       s->enable ? "+" : " ",
 	       s->description ? s->description : "") ;
 	}
+    fflush(stdout) ;
 done :
     return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
 }
