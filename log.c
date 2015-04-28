@@ -436,7 +436,7 @@ extern void log_puts_to_first_nl(LOGSEC *ls,char *s)
     log_put_to_first_nl(ls,s,strlen(s)) ;
     }
 
-LOGSEC ls_generic[] = {"",1} ;
+LOGSEC ls_generic[] = {"generic",1,"Generic catch-all"} ;
 
 /* ================================================================ */
 #include	<pu/printg.h>
