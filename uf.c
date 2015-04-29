@@ -370,6 +370,7 @@ static int argf__ufc_list(char *name,char *value,void *a0)
 {
     ufc_map(argf__ufc_list_,0) ;
     fflush(stdout) ;
+    arg_g.nomain = 1 ;
     return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
 }
 

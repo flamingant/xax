@@ -219,6 +219,7 @@ static int argf__log_section_list(char *name,char *value,void *a0)
 	       s->description ? s->description : "") ;
 	}
     fflush(stdout) ;
+    arg_g.nomain = 1 ;
 done :
     return(ASF_ARGACCEPTED | ASF_VALUEIGNORED) ;
 }
