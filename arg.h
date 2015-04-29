@@ -36,6 +36,7 @@ extern int arg_peek(int argc,char **argv,char *s) ;
 #define ASF_VALUEIGNORED		2
 #define ASF_ARGUNKNOWN			4
 #define ASF_DEFERRED			8
+#define ASF_NOMAIN			16
 
 /* not return codes */
 
@@ -100,6 +101,16 @@ extern int argset_try_one(int argc,char **argv,ARGSET *s) ;
 
 extern ARGSET **GSV_ARGSET_start(void) ;
 extern ARGSET **GSV_ARGSET_end(void) ;
+
+typedef struct {
+    char	*mode ;
+    int		version_show ;
+    int		help ;
+    int		noinit ;
+    int		nomain ;
+    } ARG_G ;
+
+extern ARG_G arg_g ;
 
 #endif
 

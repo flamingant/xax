@@ -14,6 +14,8 @@ extern "C" {
 
 #include	".gen/arg.h"
 
+ARG_G arg_g ;
+
 /* ================================================================ */
 extern ARGSET **GSV_ARGSET_start(void)
 {
