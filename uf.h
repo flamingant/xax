@@ -168,25 +168,6 @@ extern void ufs_quit(void) ;
 extern void uf_trace(UF *uf,char *fmt,...) ;
 
 /* ================================================================ */
-/* 
-   until now, there has been no storage associated with UFF functions.
-   The idea was that everything would be provided through the UFF,
-   including name.
-   Every UFF must respond to a UFM_TYPENAME, but it didn't mean that
-   any static space was reserved for the name in a structure.
-   However, there are data elements that would normally always be
-   handled the same way, so by default there can be a common
-   structure which can be accessed from the default UFF functions
-   in order that debug options can be set up ahead of creation
-   of UF objects
-*/
-
-typedef struct {
-    char	*name ;
-    UF_TRACE	trace ;
-    } UFSS ;		/* Standard Static */
-	
-/* ================================================================ */
 #endif
 
 #ifdef __cplusplus /*Z*/

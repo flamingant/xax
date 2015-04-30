@@ -1,1 +1,13 @@
+#+TODO: TODO() START(!) DONE(!)
+
 This is just the npu library
+
+*
+** DONE purge UFSS
+   - State "DONE"       from "START"      [2015-04-30 Thu 18:31]
+   - State "START"      from "TODO"       [2015-04-30 Thu 17:40]
+** DONE trace initialize from class
+   - State "DONE"       from "START"      [2015-04-30 Thu 18:31]
+   - State "START"      from "TODO"       [2015-04-30 Thu 18:31]
+** obsolete "use" clauses
+** rename null_uff to base_uff

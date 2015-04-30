@@ -64,6 +64,8 @@ static struct {
     int		max_poll ;
 
     RAY		ufq_ray[1] ;
+    UF_TRACE 	trace ;
+
     } ufs ;
 
 extern u32 uf_send_direct(UF *uf,int m,u32 a)
@@ -128,31 +130,6 @@ extern UFC *ufc_scan(UFC *(*fun)(UFC *,void *),void *a)
     return 0 ;
     }
    
-/* ================================================================ */
-extern UFF *GSV_UFF_start(void)
-{
-    extern UFF __start_GSV_UFF[] ;
-    return __start_GSV_UFF ;
-    }
-
-extern UFF *GSV_UFF_end(void)
-{
-    extern UFF __stop_GSV_UFF[] ;
-    return __stop_GSV_UFF ;
-    }
-
-extern UFSS *ufss_lookup(char *name)
-{
-    UFF *s = GSV_UFF_start() ;
-    UFF *e = GSV_UFF_end() ;
-    while (s < e) {
-	UFF f = *s++ ;
-	UFSS *ss = (UFSS *) f(uf_dummy,UFM_GET_STATIC,0) ;
-	if (ss && !stricmp(ss->name,name)) return ss ;
-	}
-    return 0 ;
-    }
-
 /* ================================================================ */
 extern int ufm_offset(UFM m)
 {
@@ -229,23 +206,25 @@ extern int UFM_ARG_DESCRIBE_send(UF *f,int m,u32 a,MT *mt)
     return UF_SEND_RAW(f,UFM_ARG_DESCRIBE,(u32) aa) ;
     }
 
-/* ~# use collect ; collect::register('uff','null_uff') ; #~ */
-
-UFSS null_ufss[] = {"null"} ;
+/* ================================================================ */
+/* base_ufc has a special use as it also holds the overriding
+   message trace flags.
+   */
 
 extern u32 null_uff(UF *f,int m,u32 a)
 {
     switch(m) {
-    case UFM_GET_STATIC:
-	return (u32) null_ufss ;
     case UFM_MSG_NAME:
 	return((u32) ufm_name_base(a)) ;
-    case UFM_TRACE_OK:
+    case UFM_TRACE_OK: {
+        int o ;
 	if (f->trace.all > f->trace.none) return 1 ;
 	if (f->trace.all < f->trace.none) return 0 ;
-	if (null_ufss->trace.all > null_ufss->trace.none) return 1 ;
-	if (null_ufss->trace.all < null_ufss->trace.none) return 0 ;
-	return(f->trace.ufm[(int) ufm_offset((UFM) a)]) ;
+	if (base_ufc->trace.all > base_ufc->trace.none) return 1 ;
+	if (base_ufc->trace.all < base_ufc->trace.none) return 0 ;
+	o = ufm_offset((UFM) a) ;
+	return(base_ufc->trace.ufm[o] || f->trace.ufm[o]) ;
+	}
     case UFM_TYPENAME:
 	mtprintf((MT *) a,"((UFF *) 0x%08x)",f->f) ;
 	return(a) ;
@@ -524,6 +503,7 @@ extern u32 uf_send_and_notify(UF *uf,int m,u32 a)
 
 extern UF *uf_create(UFF f,void *d,void *cp)
 {
+    UFC		*ufc = base_ufc ;
     UF *uf ;
     ufs_init(0,0) ;
     uf = uf_alloc() ;
@@ -533,10 +513,7 @@ extern UF *uf_create(UFF f,void *d,void *cp)
     uf->parent = 0 ;
     uf->queue.head = 0 ;
     uf->queue.tail = &uf->queue.head ;
-{
-    UFSS	*ss = (UFSS *) uf_send_direct(uf,UFM_GET_STATIC,0) ;
-    if (ss) uf->trace = ss->trace ;
-    }
+    uf->trace = ufc->trace ;
     uf_send(uf,UFM_CREATE,(u32) cp) ;
     ufs.uf_reg = rcons_cons(uf,ufs.uf_reg) ;
     return(uf) ;
