@@ -123,7 +123,7 @@ typedef struct {
     u32		a ;
     } UFM_NOTIFY_ARG ;
 
-extern UF *uf_create(UFF f,void *d,void *cp) ;
+extern UF *uf_create(UFC *ufc,void *d,void *cp) ;
 extern void uf_destroy(UF *uf) ;
 
 extern void uf_socket_register(UF *uf,int fd) ;

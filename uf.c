@@ -501,13 +501,13 @@ extern u32 uf_send_and_notify(UF *uf,int m,u32 a)
 #define uf_alloc()	tscalloc(1,UF)
 #define uf_free(u)	free(u)
 
-extern UF *uf_create(UFF f,void *d,void *cp)
+extern UF *uf_create(UFC *ufc,void *d,void *cp)
 {
-    UFC		*ufc = base_ufc ;
     UF *uf ;
     ufs_init(0,0) ;
     uf = uf_alloc() ;
-    uf->f = f ;
+    uf->c = ufc ;
+    uf->f = ufc->f ;
     uf->d.v = d ;
     uf->state = 0 ;
     uf->parent = 0 ;
